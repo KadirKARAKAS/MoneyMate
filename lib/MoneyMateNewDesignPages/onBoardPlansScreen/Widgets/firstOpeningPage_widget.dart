@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
-import '../../../firebase.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 
 class FirstOpeningPageWidget extends StatelessWidget {
@@ -49,6 +48,7 @@ class FirstOpeningPageWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
             child: Text(
@@ -57,7 +57,7 @@ class FirstOpeningPageWidget extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 70,
+            height: 20,
           ),
           TextField(
             controller: textFieldController1,
@@ -68,6 +68,7 @@ class FirstOpeningPageWidget extends StatelessWidget {
           ),
           SizedBox(height: 10),
           TextField(
+            keyboardType: TextInputType.number,
             controller: textFieldController2,
             decoration: InputDecoration(
               labelText: 'Biriktirmek istediğiniz miktarı giriniz',
