@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:moneymate/Utils/constants.dart';
 import '../../../firebase.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 
@@ -17,23 +18,26 @@ class FirstOpeningPageWidget extends StatelessWidget {
 
       {
         final plans = <String, dynamic>{
-          "name": textFieldController1.text,
-          "price": textFieldController2.text,
+          "name": text1,
+          "price": text2,
         };
 
-        FirebaseFirestore.instance
-            .collection("Plans")
-            .add(plans)
-            .then((DocumentReference doc) => {doc.id});
+        await FirebaseFirestore.instance.collection("Plans").doc().set(plans);
+
         textFieldController1.clear();
         textFieldController2.clear();
-        QuerySnapshot<Map<String, dynamic>> value =
-            await FirebaseFirestore.instance.collection("Plans").get();
-        FirebaseService().getdataList = [];
-        for (var docSnapshot in value.docs) {
-          FirebaseService().getdataList.add(docSnapshot.data());
-        }
+
+        await FirebaseFirestore.instance
+            .collection("Plans")
+            .get()
+            .then((value) {
+          for (var docSnapshot in value.docs) {
+            Map<String, dynamic> xMap = docSnapshot.data();
+            getdataList.addAll([xMap]);
+          }
+        });
       }
+
       await Navigator.push(
           context,
           MaterialPageRoute(
