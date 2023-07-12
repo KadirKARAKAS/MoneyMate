@@ -4,7 +4,7 @@ import 'package:moneymate/Utils/constants.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 
 class FirstOpeningPageWidget extends StatelessWidget {
-  const FirstOpeningPageWidget({super.key});
+  const FirstOpeningPageWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,34 +14,36 @@ class FirstOpeningPageWidget extends StatelessWidget {
     Future<void> addToDatabase() async {
       String text1 = textFieldController1.text;
       String text2 = textFieldController2.text;
+      plansName = text1;
 
-      {
-        final plans = <String, dynamic>{
-          "name": text1,
-          "price": text2,
-        };
+      final plans = {
+        "name": text1,
+        "price": text2,
+      };
 
-        await FirebaseFirestore.instance.collection("Plans").doc().set(plans);
+      await FirebaseFirestore.instance
+          .collection("Plans")
+          .doc(text1)
+          .set(plans);
 
-        textFieldController1.clear();
-        textFieldController2.clear();
+      textFieldController1.clear();
+      textFieldController2.clear();
 
-        await FirebaseFirestore.instance
-            .collection("Plans")
-            .get()
-            .then((value) {
-          for (var docSnapshot in value.docs) {
-            Map<String, dynamic> xMap = docSnapshot.data();
-            getdataList.addAll([xMap]);
-          }
-        });
-      }
+      await FirebaseFirestore.instance
+          .collection("Plans")
+          .doc(text1)
+          .get()
+          .then((doc) {
+        Map<String, dynamic> xMap = doc.data() as Map<String, dynamic>;
+        getdataList.addAll([xMap]);
+      });
 
-      await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainPageScreen(),
-          ));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainPageScreen(),
+        ),
+      );
     }
 
     Size size = MediaQuery.of(context).size;
