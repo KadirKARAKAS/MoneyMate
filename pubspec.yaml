@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore: ^4.8.2
   firebase_core: ^2.14.0
   syncfusion_flutter_gauges: ^22.1.37
+  permission_handler: ^10.4.3
 
 
 

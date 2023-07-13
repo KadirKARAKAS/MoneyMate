@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moneymate/MoneyMateNewDesignPages/onBoardPlansScreen/Widgets/firstOpeningPage_widget.dart';
+import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Widgets/firstOpeningPage_widget.dart';
 
 class FirstOpeningPage extends StatefulWidget {
   const FirstOpeningPage({super.key});

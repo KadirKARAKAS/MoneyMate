@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/test.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 
 class FirstOpeningPageWidget extends StatelessWidget {
@@ -98,6 +100,20 @@ class FirstOpeningPageWidget extends StatelessWidget {
                   ),
                 ),
               ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TestPage(),
+                  ));
+            },
+            child: Container(
+              width: 100,
+              height: 100,
+              color: Colors.red,
             ),
           ),
         ],

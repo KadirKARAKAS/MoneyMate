@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Pages/firstOpeningPage.dart';
 
-import '../../Utils/constants.dart';
+import '../../SavingsAccounts/Pages/savings_accounts.dart';
 
 class SettingsPageWidgets extends StatelessWidget {
   const SettingsPageWidgets({super.key});
@@ -10,7 +11,20 @@ class SettingsPageWidgets extends StatelessWidget {
     return Column(
       children: [
         topBorWidget(context),
-        Container(),
+        settingsContainerWidget(context, "Birikim hesaplarım", () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SavingsAccountsPage(),
+              ));
+        }),
+        settingsContainerWidget(context, "Yeni birikim hesabı oluştur", () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FirstOpeningPage(),
+              ));
+        }),
       ],
     );
   }
@@ -45,5 +59,49 @@ class SettingsPageWidgets extends StatelessWidget {
                 ))),
       ),
     ]);
+  }
+
+  Widget settingsContainerWidget(
+      BuildContext context, String containerText, Function onTap) {
+    Size size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      child: InkWell(
+        onTap: () {
+          onTap();
+        },
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Stack(children: [
+          Container(
+              width: size.width,
+              height: 70,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(width: 0.5))),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, left: 10),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.circle,
+                  size: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    containerText,
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ]),
+      ),
+    );
   }
 }
