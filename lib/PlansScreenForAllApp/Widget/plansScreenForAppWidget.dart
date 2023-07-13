@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:moneymate/SettingsPage/Pages/settings_page_main.dart';
 import 'package:moneymate/Utils/constants.dart';
 
 class PlansScreenForAppWidget extends StatefulWidget {
@@ -20,26 +21,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
         children: [
           Column(
             children: [
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30, bottom: 30),
-                  child: Row(
-                    //TOP BAR KISMI BURASI
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(),
-                      Container(
-                        child: Text(
-                          getdataList[0]["name"],
-                          style: TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      InkWell(onTap: () {}, child: Icon(Icons.settings)),
-                    ],
-                  ),
-                ),
-              ),
+              topBorWidget(),
               plansimagecircle(context, 170, 170),
               plansbalancevalue(context),
               finaloperations(),
@@ -49,8 +31,10 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                   shrinkWrap: true,
                   itemCount: incomedataList.length,
                   itemBuilder: (context, index) {
-                    print('aaaa');
-                    return incomefinalOperationsContainer(index);
+                    final bool boolValue = incomedataList[index]["BoolValue"];
+                    return boolValue
+                        ? incomefinalOperationsContainer(index)
+                        : expensefinalOperationsContainer(index);
                   },
                 ),
               ),
@@ -287,7 +271,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                     await FirebaseFirestore.instance
                         .collection("Plans")
                         .doc(plansName)
-                        .collection('Income')
+                        .collection('Income&Expense')
                         .get()
                         .then((value) {
                       incomedataList.clear();
@@ -295,6 +279,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                         Map<String, dynamic> xMap = docSnapshot.data();
                         incomedataList.addAll([xMap]);
                       }
+                      print(incomedataList);
                     });
 
                     setState(() {
@@ -331,62 +316,51 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
   Future<void> addtoHistoryFunction() async {
     String text1 = incomeTextController.text;
     plansName;
-    {
-      final plans = <String, dynamic>{
-        // "name": text1,
-        "Income": text1,
-      };
 
-      await FirebaseFirestore.instance
-          .collection("Plans")
-          .doc(plansName)
-          .collection("Income&Expense")
-          .doc()
-          .set(plans);
+    final newIncome = {
+      "Income": text1,
+      "BoolValue": true,
+    };
 
-      await FirebaseFirestore.instance
-          .collection("Plans")
-          .doc(plansName)
-          .collection('Income&Expense')
-          .get()
-          .then((value) {
-        for (var docSnapshot in value.docs) {
-          Map<String, dynamic> xMap = docSnapshot.data();
-          incomedataList.addAll([xMap]);
-        }
-      });
-    }
+    await FirebaseFirestore.instance
+        .collection("Plans")
+        .doc(plansName)
+        .collection("Income&Expense")
+        .add(newIncome);
+
+    setState(() {
+      balance += int.parse(incomeTextController.text);
+      isShowIncomeAlertDialog = false;
+      incomedataList.add(newIncome);
+    });
+
+    incomeBalanceValue = incomeTextController.text;
+    incomeTextController.clear();
   }
 
   Future<void> addtoExpenseHistoryFunction() async {
     String text1 = expenseTextController.text;
     plansName;
 
-    {
-      final plans = <String, dynamic>{
-        // "name": text1,
-        "Expense": text1,
-      };
+    final newExpense = {
+      "Expense": text1,
+      "BoolValue": false,
+    };
 
-      await FirebaseFirestore.instance
-          .collection("Plans")
-          .doc(plansName)
-          .collection("Income&Expense")
-          .doc()
-          .set(plans);
+    await FirebaseFirestore.instance
+        .collection("Plans")
+        .doc(plansName)
+        .collection("Income&Expense")
+        .add(newExpense);
 
-      await FirebaseFirestore.instance
-          .collection("Plans")
-          .doc(plansName)
-          .collection('Income&Expense')
-          .get()
-          .then((value) {
-        for (var docSnapshot in value.docs) {
-          Map<String, dynamic> xMap = docSnapshot.data();
-          incomedataList.addAll([xMap]);
-        }
-      });
-    }
+    setState(() {
+      balance -= int.parse(expenseTextController.text);
+      isexpenseShowIncomeAlertDialog = false;
+      incomedataList.add(newExpense);
+    });
+
+    expenseBalanceValue = expenseTextController.text;
+    expenseTextController.clear();
   }
 
   Widget expenseAlertDialog() {
@@ -427,7 +401,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                     await FirebaseFirestore.instance
                         .collection("Plans")
                         .doc(plansName)
-                        .collection('Expense')
+                        .collection("Income&Expense")
                         .get()
                         .then((value) {
                       incomedataList.clear();
@@ -435,6 +409,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                         Map<String, dynamic> xMap = docSnapshot.data();
                         incomedataList.addAll([xMap]);
                       }
+                      print(incomedataList);
                     });
 
                     setState(() {
@@ -442,7 +417,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                       isexpenseShowIncomeAlertDialog = false;
                     });
 
-                    incomeBalanceValue = expenseTextController.text;
+                    expenseBalanceValue = expenseTextController.text;
                     expenseTextController.clear();
                   },
                   child: Container(
@@ -491,7 +466,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                     height: 2,
                   ),
                   Text(
-                    "Gelir Eklendi",
+                    "Gider Eklendi",
                     style: TextStyle(color: Colors.grey, fontSize: 10),
                   ),
                 ],
@@ -501,7 +476,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
           Row(
             children: [
               Text(
-                incomedataList[index][""],
+                incomedataList[index]["Expense"],
                 style: TextStyle(
                     color: Colors.red,
                     fontSize: 20,
@@ -511,7 +486,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                 "₺",
                 style: TextStyle(
                     fontSize: 16,
-                    color: Colors.green,
+                    color: Colors.red,
                     fontWeight: FontWeight.bold),
               ),
             ],
@@ -519,5 +494,38 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
         ],
       ),
     );
+  }
+
+  Widget topBorWidget() {
+    Size size = MediaQuery.of(context).size;
+    return Stack(children: [
+      Container(
+        width: size.width,
+        height: 80,
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 40, bottom: 40),
+        child: Center(
+          child: Text(
+            getdataList[0]["name"],
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 40, right: 10),
+        child: Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
+                      ));
+                },
+                child: Icon(Icons.settings))),
+      ),
+    ]);
   }
 }
