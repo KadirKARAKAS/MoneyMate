@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 
@@ -57,7 +56,6 @@ class SavingsAccountPageWidget extends StatelessWidget {
 
   Widget savingspageContainer(
       BuildContext context, String containerText, Function onTap) {
-    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: InkWell(
