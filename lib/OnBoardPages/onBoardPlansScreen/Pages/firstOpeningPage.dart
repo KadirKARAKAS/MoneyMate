@@ -12,7 +12,7 @@ class _FirstOpeningPageState extends State<FirstOpeningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FirstOpeningPageWidget(),
+      body: FirstOpeningPageWidget(key: GlobalKey()),
     );
   }
 }
