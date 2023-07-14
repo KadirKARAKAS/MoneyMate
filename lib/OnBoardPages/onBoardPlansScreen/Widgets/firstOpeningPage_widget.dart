@@ -34,38 +34,38 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
     Size size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          const Center(
             child: Text(
               "Birikim Hesabı Oluşturun",
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextField(
             controller: textFieldController1,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Birikim hesabınıza isim veriniz',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextField(
             keyboardType: TextInputType.number,
             controller: textFieldController2,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Biriktirmek istediğiniz miktarı giriniz',
               border: OutlineInputBorder(),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           uploadImageContainer(),
-          SizedBox(height: 10),
-          Text("Biriktirmek istediğiniz ürünün resmini seçiniz"),
-          SizedBox(height: 20),
+          const SizedBox(height: 10),
+          const Text("Biriktirmek istediğiniz ürünün resmini seçiniz"),
+          const SizedBox(height: 20),
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
@@ -77,7 +77,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
               ),
               child: TextButton(
                 onPressed: onTapCreateAccount,
-                child: Text(
+                child: const Text(
                   'Hesap oluştur',
                   style: TextStyle(
                     color: Colors.white,
@@ -106,7 +106,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
                   image: FileImage(selectedImagePath!),
                   fit: BoxFit.cover,
                 )
-              : DecorationImage(
+              : const DecorationImage(
                   image: AssetImage('assets/uploadimage.png'),
                   fit: BoxFit.cover,
                 ),
@@ -126,9 +126,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
           imagePath = image.path;
         });
       }
-    } else {
-      // Handle permission denied
-    }
+    } else {}
   }
 
   void onTapCreateAccount() async {
@@ -137,7 +135,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
       await storageOnTapFunction();
       addToDatabase();
     } else {
-      // Handle empty text fields
+      SizedBox();
     }
   }
 
@@ -150,7 +148,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
           .child(imagePathList.last)
           .putFile(imageFile);
     } else {
-      print('Image file does not exist.');
+      SizedBox();
     }
   }
 
@@ -184,5 +182,37 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
         builder: (context) => MainPageScreen(),
       ),
     );
+  }
+
+  Widget topBorWidget(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Stack(children: [
+      Container(
+        width: size.width,
+        height: 80,
+      ),
+      const Padding(
+        padding: EdgeInsets.only(top: 40, bottom: 40),
+        child: Center(
+          child: Text(
+            "",
+            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 40, left: 10),
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.arrow_back_outlined,
+                  size: 32,
+                ))),
+      ),
+    ]);
   }
 }

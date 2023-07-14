@@ -8,3 +8,4 @@ int balance = 0;
 String incomeBalanceValue = incomeTextController.text;
 String expenseBalanceValue = expenseTextController.text;
 String plansName = "";
+bool firstpageBackbutton = false;

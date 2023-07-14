@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Pages/firstOpeningPage.dart';
 
 import '../../SavingsAccounts/Pages/savings_accounts.dart';
+import '../../Utils/constants.dart';
 
 class SettingsPageWidgets extends StatelessWidget {
   const SettingsPageWidgets({super.key});
@@ -19,6 +20,7 @@ class SettingsPageWidgets extends StatelessWidget {
               ));
         }),
         settingsContainerWidget(context, "Yeni birikim hesabı oluştur", () {
+          firstpageBackbutton = true;
           Navigator.push(
               context,
               MaterialPageRoute(
