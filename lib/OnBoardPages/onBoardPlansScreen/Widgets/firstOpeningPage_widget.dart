@@ -1,11 +1,7 @@
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 import 'package:moneymate/Utils/constants.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class FirstOpeningPageWidget extends StatefulWidget {
   const FirstOpeningPageWidget({Key? key}) : super(key: key);
@@ -15,12 +11,14 @@ class FirstOpeningPageWidget extends StatefulWidget {
 }
 
 class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
-  final ImagePicker picker = ImagePicker();
-  String imagePath = '';
-  File? selectedImagePath;
-
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController2 = TextEditingController();
+  late TextEditingController textEditingControllerTest;
+  @override
+  void initState() {
+    super.initState();
+    textEditingControllerTest = TextEditingController();
+  }
 
   @override
   void dispose() {
@@ -62,10 +60,6 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
             ),
           ),
           const SizedBox(height: 10),
-          uploadImageContainer(),
-          const SizedBox(height: 10),
-          const Text("Biriktirmek istediğiniz ürünün resmini seçiniz"),
-          const SizedBox(height: 20),
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
@@ -76,7 +70,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: TextButton(
-                onPressed: onTapCreateAccount,
+                onPressed: addToDatabase,
                 child: const Text(
                   'Hesap oluştur',
                   style: TextStyle(
@@ -93,63 +87,11 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
     );
   }
 
-  Widget uploadImageContainer() {
-    return InkWell(
-      onTap: onTapFunction,
-      child: Container(
-        width: 90,
-        height: 90,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: selectedImagePath != null
-              ? DecorationImage(
-                  image: FileImage(selectedImagePath!),
-                  fit: BoxFit.cover,
-                )
-              : const DecorationImage(
-                  image: AssetImage('assets/uploadimage.png'),
-                  fit: BoxFit.cover,
-                ),
-        ),
-      ),
-    );
-  }
-
-  void onTapFunction() async {
-    if (await Permission.storage.request().isGranted) {
-      final XFile? image =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
-
-      if (image != null) {
-        setState(() {
-          selectedImagePath = File(image.path);
-          imagePath = image.path;
-        });
-      }
-    } else {}
-  }
-
   void onTapCreateAccount() async {
     if (textFieldController1.text.isNotEmpty &&
         textFieldController2.text.isNotEmpty) {
-      await storageOnTapFunction();
       addToDatabase();
-    } else {
-      SizedBox();
-    }
-  }
-
-  Future<void> storageOnTapFunction() async {
-    List<String> imagePathList = imagePath.split('/');
-    File imageFile = File(imagePath);
-    if (imageFile.absolute.existsSync()) {
-      await FirebaseStorage.instance
-          .ref('TestC')
-          .child(imagePathList.last)
-          .putFile(imageFile);
-    } else {
-      SizedBox();
-    }
+    } else {}
   }
 
   Future<void> addToDatabase() async {

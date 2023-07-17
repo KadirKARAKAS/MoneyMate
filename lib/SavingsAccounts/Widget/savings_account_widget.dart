@@ -14,8 +14,11 @@ class SavingsAccountPageWidget extends StatelessWidget {
           shrinkWrap: true,
           itemCount: getdataList.length,
           itemBuilder: (context, index) {
-            return savingspageContainer(
-                context, getdataList[index]["name"], () {});
+            return savingspageContainer(context, getdataList[index]["name"],
+                () {
+              savingsPlansName = getdataList[index]["name"];
+              print(savingsPlansName);
+            });
           },
         ),
       ),
@@ -95,37 +98,37 @@ class SavingsAccountPageWidget extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 10, top: 3),
-                  child: Row(
-                    children: [
-                      Container(
-                        child: Text(
-                          balance.toString(),
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      SizedBox(width: 2),
-                      Container(
-                        child: Text(
-                          "/",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      SizedBox(width: 2),
-                      Container(
-                        child: Text(
-                          getdataList[0]["price"],
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // child: Row(
+                  //   children: [
+                  //     Container(
+                  //       child: Text(
+                  //         balance.toString(),
+                  //         style: TextStyle(
+                  //             color: Colors.green,
+                  //             fontSize: 16,
+                  //             fontWeight: FontWeight.w600),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 2),
+                  //     Container(
+                  //       child: Text(
+                  //         "/",
+                  //         style: TextStyle(
+                  //             fontSize: 16, fontWeight: FontWeight.w600),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 2),
+                  //     Container(
+                  //       child: Text(
+                  //         getdataList[0]["price"],
+                  //         style: TextStyle(
+                  //             color: Colors.grey,
+                  //             fontSize: 16,
+                  //             fontWeight: FontWeight.w600),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
               ],
             ),

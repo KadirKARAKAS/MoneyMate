@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Pages/firstOpeningPage.dart';
-
 import '../../SavingsAccounts/Pages/savings_accounts.dart';
 import '../../Utils/constants.dart';
 

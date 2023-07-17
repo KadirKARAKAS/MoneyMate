@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/SettingsPage/Pages/settings_page_main.dart';
 import 'package:moneymate/Utils/constants.dart';
 
 class PlansScreenForAppWidget extends StatefulWidget {
-  const PlansScreenForAppWidget({super.key});
+  const PlansScreenForAppWidget({Key? key}) : super(key: key);
 
   @override
   State<PlansScreenForAppWidget> createState() =>
@@ -14,6 +15,24 @@ class PlansScreenForAppWidget extends StatefulWidget {
 class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
   bool isShowIncomeAlertDialog = false;
   bool isexpenseShowIncomeAlertDialog = false;
+
+  late TextEditingController incomeTextController;
+  late TextEditingController expenseTextController;
+
+  @override
+  void initState() {
+    super.initState();
+    incomeTextController = TextEditingController();
+    expenseTextController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    incomeTextController.dispose();
+    expenseTextController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +46,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               finaloperations(),
               Expanded(
                 child: ListView.builder(
-                  padding: EdgeInsets.only(top: 3),
+                  padding: const EdgeInsets.only(top: 3),
                   shrinkWrap: true,
                   itemCount: incomedataList.length,
                   itemBuilder: (context, index) {
@@ -40,10 +59,8 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               ),
             ],
           ),
-          isShowIncomeAlertDialog ? incomeAlertDialog() : const SizedBox(),
-          isexpenseShowIncomeAlertDialog
-              ? expenseAlertDialog()
-              : const SizedBox()
+          isShowIncomeAlertDialog ? incomeAlertDialog() : SizedBox(),
+          isexpenseShowIncomeAlertDialog ? expenseAlertDialog() : SizedBox(),
         ],
       ),
     );
@@ -54,7 +71,9 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
       width: widthh,
       height: heighht,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(999), color: Colors.red),
+        borderRadius: BorderRadius.circular(999),
+        color: Colors.red,
+      ),
     );
   }
 
@@ -111,7 +130,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                   color: Colors.green,
                   size: 60,
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -122,16 +141,20 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               child: Text(
                 balance.toString(),
                 style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(width: 2),
             Container(
               child: Text(
                 "/",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(width: 2),
@@ -139,9 +162,10 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               child: Text(
                 getdataList[0]["price"],
                 style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.grey,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
@@ -160,21 +184,22 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 2),
               child: Container(
-                child: Text(
+                child: const Text(
                   "Son işlemler",
                   style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.grey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ),
-          Icon(
+          const Icon(
             Icons.navigate_next,
             color: Colors.grey,
             size: 20,
-          )
+          ),
         ],
       ),
     );
@@ -189,7 +214,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
           Row(
             children: [
               plansimagecircle(context, 80, 80),
-              SizedBox(
+              const SizedBox(
                 width: 3,
               ),
               Column(
@@ -199,10 +224,10 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                     getdataList[0]["name"],
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
-                  Text(
+                  const Text(
                     "Gelir Eklendi",
                     style: TextStyle(color: Colors.grey, fontSize: 10),
                   ),
@@ -219,7 +244,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold),
               ),
-              Text(
+              const Text(
                 "₺",
                 style: TextStyle(
                     fontSize: 16,
@@ -249,65 +274,75 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             color: Colors.black45,
           ),
         ),
-        AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Text("Gelir Ekle"),
-          actions: [
-            TextField(
-              controller: incomeTextController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Birikim hesabınıza para ekleyin',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Center(
-                child: InkWell(
-                  onTap: () async {
-                    addtoHistoryFunction();
-                    await FirebaseFirestore.instance
-                        .collection("Plans")
-                        .doc(plansName)
-                        .collection('Income&Expense')
-                        .get()
-                        .then((value) {
-                      incomedataList.clear();
-                      for (var docSnapshot in value.docs) {
-                        Map<String, dynamic> xMap = docSnapshot.data();
-                        incomedataList.addAll([xMap]);
-                      }
-                      print(incomedataList);
-                    });
-
-                    setState(() {
-                      balance = balance + int.parse(incomeTextController.text);
-                      isShowIncomeAlertDialog = false;
-                    });
-
-                    incomeBalanceValue = incomeTextController.text;
-                    incomeTextController.clear();
-                  },
-                  child: Container(
-                    child: Center(
-                      child: Text(
-                        "Ekle",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                    width: 100,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.circular(16),
-                      color: Colors.green,
+        FutureBuilder<bool>(
+          future: Future.delayed(Duration(milliseconds: 100)),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            final bool showAlertDialog = snapshot.data ?? false;
+            if (showAlertDialog) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24)),
+                title: Text("Gelir Ekle"),
+                actions: [
+                  TextField(
+                    controller: incomeTextController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Birikim hesabınıza para ekleyin',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: InkWell(
+                        onTap: () async {
+                          addtoHistoryFunction();
+                          await FirebaseFirestore.instance
+                              .collection("Plans")
+                              .doc(plansName)
+                              .collection('Income&Expense')
+                              .get()
+                              .then((value) {
+                            incomedataList.clear();
+                            for (var docSnapshot in value.docs) {
+                              Map<String, dynamic> xMap = docSnapshot.data();
+                              incomedataList.addAll([xMap]);
+                            }
+                            print(incomedataList);
+                          });
+
+                          setState(() {
+                            balance =
+                                balance + int.parse(incomeTextController.text);
+                            isShowIncomeAlertDialog = false;
+                          });
+
+                          incomeBalanceValue = incomeTextController.text;
+                          incomeTextController.clear();
+                        },
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "Ekle",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(16),
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return SizedBox();
+          },
         ),
       ],
     );
@@ -379,65 +414,74 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             color: Colors.black45,
           ),
         ),
-        AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-          title: Text("Gider Ekle"),
-          actions: [
-            TextField(
-              controller: expenseTextController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Birikim hesabınıdan para çekin',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Center(
-                child: InkWell(
-                  onTap: () async {
-                    addtoExpenseHistoryFunction();
-                    await FirebaseFirestore.instance
-                        .collection("Plans")
-                        .doc(plansName)
-                        .collection("Income&Expense")
-                        .get()
-                        .then((value) {
-                      incomedataList.clear();
-                      for (var docSnapshot in value.docs) {
-                        Map<String, dynamic> xMap = docSnapshot.data();
-                        incomedataList.addAll([xMap]);
-                      }
-                      print(incomedataList);
-                    });
-
-                    setState(() {
-                      balance = balance - int.parse(expenseTextController.text);
-                      isexpenseShowIncomeAlertDialog = false;
-                    });
-
-                    expenseBalanceValue = expenseTextController.text;
-                    expenseTextController.clear();
-                  },
-                  child: Container(
-                    child: Center(
-                      child: Text(
-                        "Ekle",
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                    width: 100,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadiusDirectional.circular(16),
-                      color: Colors.green,
+        FutureBuilder<bool>(
+          future: Future.delayed(Duration(milliseconds: 100)),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            final bool showAlertDialog = snapshot.data ?? false;
+            if (showAlertDialog) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24)),
+                title: Text("Gider Ekle"),
+                actions: [
+                  TextField(
+                    controller: expenseTextController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Birikim hesabınıdan para çekin',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: InkWell(
+                        onTap: () async {
+                          addtoExpenseHistoryFunction();
+                          await FirebaseFirestore.instance
+                              .collection("Plans")
+                              .doc(plansName)
+                              .collection("Income&Expense")
+                              .get()
+                              .then((value) {
+                            incomedataList.clear();
+                            for (var docSnapshot in value.docs) {
+                              Map<String, dynamic> xMap = docSnapshot.data();
+                              incomedataList.addAll([xMap]);
+                            }
+                          });
+
+                          setState(() {
+                            balance =
+                                balance - int.parse(expenseTextController.text);
+                            isexpenseShowIncomeAlertDialog = false;
+                          });
+
+                          expenseBalanceValue = expenseTextController.text;
+                          expenseTextController.clear();
+                        },
+                        child: Container(
+                          child: Center(
+                            child: Text(
+                              "Ekle",
+                              style: TextStyle(fontSize: 24),
+                            ),
+                          ),
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadiusDirectional.circular(16),
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }
+            return SizedBox();
+          },
         ),
       ],
     );
@@ -515,16 +559,19 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
       Padding(
         padding: const EdgeInsets.only(top: 40, right: 10),
         child: Align(
-            alignment: Alignment.centerRight,
-            child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SettingsPage(),
-                      ));
-                },
-                child: Icon(Icons.settings))),
+          alignment: Alignment.centerRight,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
+            },
+            child: Icon(Icons.settings),
+          ),
+        ),
       ),
     ]);
   }

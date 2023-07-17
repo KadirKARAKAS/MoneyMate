@@ -1,11 +1,20 @@
 import 'package:flutter/cupertino.dart';
 
+//List
 List<Map<String, dynamic>> getdataList = [];
 List<Map<String, dynamic>> incomedataList = [];
+//controller
 final TextEditingController incomeTextController = TextEditingController();
 final TextEditingController expenseTextController = TextEditingController();
-int balance = 0;
+
+//String
+String savingsPlansName = "";
 String incomeBalanceValue = incomeTextController.text;
 String expenseBalanceValue = expenseTextController.text;
 String plansName = "";
+
+//int
+int balance = 0;
+
+//bool
 bool firstpageBackbutton = false;
