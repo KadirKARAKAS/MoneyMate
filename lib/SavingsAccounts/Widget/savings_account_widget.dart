@@ -16,8 +16,8 @@ class SavingsAccountPageWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             return savingspageContainer(context, getdataList[index]["name"],
                 () {
-              savingsPlansName = getdataList[index]["name"];
-              print(savingsPlansName);
+              // savingsPlansName = getdataList[index]["name"];
+              // print(savingsPlansName);
             });
           },
         ),

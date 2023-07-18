@@ -274,75 +274,65 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             color: Colors.black45,
           ),
         ),
-        FutureBuilder<bool>(
-          future: Future.delayed(Duration(milliseconds: 100)),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            final bool showAlertDialog = snapshot.data ?? false;
-            if (showAlertDialog) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24)),
-                title: Text("Gelir Ekle"),
-                actions: [
-                  TextField(
-                    controller: incomeTextController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Birikim hesabınıza para ekleyin',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
+        AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          title: Text("Gelir Ekle"),
+          actions: [
+            TextField(
+              controller: incomeTextController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Birikim hesabınıza para ekleyin',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Center(
+                child: InkWell(
+                  onTap: () async {
+                    addtoHistoryFunction();
+                    await FirebaseFirestore.instance
+                        .collection("Plans")
+                        .doc(plansName)
+                        .collection('Income&Expense')
+                        .get()
+                        .then((value) {
+                      incomedataList.clear();
+                      for (var docSnapshot in value.docs) {
+                        Map<String, dynamic> xMap = docSnapshot.data();
+                        incomedataList.addAll([xMap]);
+                      }
+                    });
+
+                    setState(() {
+                      balance += int.parse(incomeTextController.text);
+                      isShowIncomeAlertDialog = false;
+                    });
+
+                    incomeBalanceValue = incomeTextController.text;
+                    incomeTextController.clear();
+                  },
+                  child: Container(
                     child: Center(
-                      child: InkWell(
-                        onTap: () async {
-                          addtoHistoryFunction();
-                          await FirebaseFirestore.instance
-                              .collection("Plans")
-                              .doc(plansName)
-                              .collection('Income&Expense')
-                              .get()
-                              .then((value) {
-                            incomedataList.clear();
-                            for (var docSnapshot in value.docs) {
-                              Map<String, dynamic> xMap = docSnapshot.data();
-                              incomedataList.addAll([xMap]);
-                            }
-                            print(incomedataList);
-                          });
-
-                          setState(() {
-                            balance =
-                                balance + int.parse(incomeTextController.text);
-                            isShowIncomeAlertDialog = false;
-                          });
-
-                          incomeBalanceValue = incomeTextController.text;
-                          incomeTextController.clear();
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              "Ekle",
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          ),
-                          width: 100,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(16),
-                            color: Colors.green,
-                          ),
-                        ),
+                      child: Text(
+                        "Ekle",
+                        style: TextStyle(fontSize: 24),
                       ),
                     ),
+                    width: 100,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.circular(16),
+                      color: Colors.green,
+                    ),
                   ),
-                ],
-              );
-            }
-            return SizedBox();
-          },
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -414,74 +404,65 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             color: Colors.black45,
           ),
         ),
-        FutureBuilder<bool>(
-          future: Future.delayed(Duration(milliseconds: 100)),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            final bool showAlertDialog = snapshot.data ?? false;
-            if (showAlertDialog) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24)),
-                title: Text("Gider Ekle"),
-                actions: [
-                  TextField(
-                    controller: expenseTextController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Birikim hesabınıdan para çekin',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
+        AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          title: Text("Gider Ekle"),
+          actions: [
+            TextField(
+              controller: expenseTextController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Birikim hesabınıdan para çekin',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Center(
+                child: InkWell(
+                  onTap: () async {
+                    addtoExpenseHistoryFunction();
+                    await FirebaseFirestore.instance
+                        .collection("Plans")
+                        .doc(plansName)
+                        .collection("Income&Expense")
+                        .get()
+                        .then((value) {
+                      incomedataList.clear();
+                      for (var docSnapshot in value.docs) {
+                        Map<String, dynamic> xMap = docSnapshot.data();
+                        incomedataList.addAll([xMap]);
+                      }
+                    });
+
+                    setState(() {
+                      balance -= int.parse(expenseTextController.text);
+                      isexpenseShowIncomeAlertDialog = false;
+                    });
+
+                    expenseBalanceValue = expenseTextController.text;
+                    expenseTextController.clear();
+                  },
+                  child: Container(
                     child: Center(
-                      child: InkWell(
-                        onTap: () async {
-                          addtoExpenseHistoryFunction();
-                          await FirebaseFirestore.instance
-                              .collection("Plans")
-                              .doc(plansName)
-                              .collection("Income&Expense")
-                              .get()
-                              .then((value) {
-                            incomedataList.clear();
-                            for (var docSnapshot in value.docs) {
-                              Map<String, dynamic> xMap = docSnapshot.data();
-                              incomedataList.addAll([xMap]);
-                            }
-                          });
-
-                          setState(() {
-                            balance =
-                                balance - int.parse(expenseTextController.text);
-                            isexpenseShowIncomeAlertDialog = false;
-                          });
-
-                          expenseBalanceValue = expenseTextController.text;
-                          expenseTextController.clear();
-                        },
-                        child: Container(
-                          child: Center(
-                            child: Text(
-                              "Ekle",
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          ),
-                          width: 100,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadiusDirectional.circular(16),
-                            color: Colors.green,
-                          ),
-                        ),
+                      child: Text(
+                        "Ekle",
+                        style: TextStyle(fontSize: 24),
                       ),
                     ),
+                    width: 100,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadiusDirectional.circular(16),
+                      color: Colors.green,
+                    ),
                   ),
-                ],
-              );
-            }
-            return SizedBox();
-          },
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -557,7 +538,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.only(top: 40, right: 10),
+        padding: const EdgeInsets.only(top: 40, right: 15),
         child: Align(
           alignment: Alignment.centerRight,
           child: InkWell(
