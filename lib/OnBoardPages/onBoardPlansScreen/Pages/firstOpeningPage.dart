@@ -16,7 +16,7 @@ class _FirstOpeningPageState extends State<FirstOpeningPage> {
       body: Column(
         children: [
           if (firstpageBackbutton) topBorWidget(context),
-          Center(child: FirstOpeningPageWidget(key: GlobalKey())),
+          Center(child: FirstOpeningPageWidget()),
         ],
       ),
     );
