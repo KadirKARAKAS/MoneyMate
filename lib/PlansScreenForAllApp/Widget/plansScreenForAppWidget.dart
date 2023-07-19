@@ -160,7 +160,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
             SizedBox(width: 2),
             Container(
               child: Text(
-                getdataList[0]["price"],
+                getdataList[selectedIndex]["price"],
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -221,7 +221,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    getdataList[0]["name"],
+                    getdataList[selectedIndex]["name"],
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -484,7 +484,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    getdataList[0]["name"],
+                    getdataList[selectedIndex]["name"],
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
@@ -532,7 +532,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
         padding: const EdgeInsets.only(top: 40, bottom: 40),
         child: Center(
           child: Text(
-            getdataList[0]["name"],
+            getdataList[selectedIndex]["name"],
             style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
         ),

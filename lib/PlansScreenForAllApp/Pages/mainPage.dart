@@ -16,10 +16,3 @@ class _MainPageScreenState extends State<MainPageScreen> {
     );
   }
 }
-// Container(
-//         child: Text(
-//           getdataList[0]["name"],
-//           style: TextStyle(
-//               fontSize: 50, fontWeight: FontWeight.bold, color: Colors.red),
-//         ),
-//       ),

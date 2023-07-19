@@ -18,3 +18,6 @@ int balance = 0;
 
 //bool
 bool firstpageBackbutton = false;
+bool isVisible = false;
+
+int selectedIndex = 0;
