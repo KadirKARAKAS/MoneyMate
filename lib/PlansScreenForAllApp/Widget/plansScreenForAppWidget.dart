@@ -73,9 +73,8 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
       width: widthh,
       height: heighht,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
-        color: Colors.red,
-      ),
+          borderRadius: BorderRadius.circular(999),
+          image: DecorationImage(image: NetworkImage(imageURLL))),
     );
   }
 
@@ -548,7 +547,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PlansAddPhoto(),
+                  builder: (context) => SettingsPage(),
                 ),
               );
             },

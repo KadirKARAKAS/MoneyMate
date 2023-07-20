@@ -86,9 +86,16 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
                       .child(imagePathList[imagePathList.length - 1])
                       .putFile(File(imagePath));
                   print('Resim Eklendi');
+                  final imageUrl = await FirebaseStorage.instance
+                      .ref(
+                          'PlansImage/${imagePathList[imagePathList.length - 1]}')
+                      .getDownloadURL();
+                  imageURLL = imageUrl;
+                  print('İmage urlllllllllllllll:::$imageURLL');
                 } else {
                   print('Resim seçilmedi.');
                 }
+
                 addToDatabase();
               },
               child: Container(
@@ -126,10 +133,12 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
     String text1 = textFieldController1.text;
     String text2 = textFieldController2.text;
     plansName = text1;
+    imageURLL = imageURLL;
 
     final plans = {
       "name": text1,
       "price": text2,
+      "imageUrl": imageURLL,
     };
 
     await FirebaseFirestore.instance.collection("Plans").doc(text1).set(plans);

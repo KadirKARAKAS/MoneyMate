@@ -12,6 +12,7 @@ String savingsPlansName = "";
 String incomeBalanceValue = incomeTextController.text;
 String expenseBalanceValue = expenseTextController.text;
 String plansName = "";
+String imageURLL = "";
 
 //int
 int balance = 0;
