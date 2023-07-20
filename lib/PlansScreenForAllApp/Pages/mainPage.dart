@@ -11,8 +11,16 @@ class MainPageScreen extends StatefulWidget {
 class _MainPageScreenState extends State<MainPageScreen> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: PlansScreenForAppWidget(),
+      body: Stack(children: [
+        Container(
+          width: size.width,
+          height: size.height,
+          color: Color(0xfff2f2f2),
+        ),
+        PlansScreenForAppWidget()
+      ]),
     );
   }
 }

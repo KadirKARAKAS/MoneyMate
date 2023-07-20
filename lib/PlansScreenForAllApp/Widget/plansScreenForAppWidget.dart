@@ -5,6 +5,7 @@ import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Widgets/plansAddPhoto_
 import 'package:moneymate/SavingsAccounts/Pages/savings_accounts.dart';
 import 'package:moneymate/SettingsPage/Pages/settings_page_main.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlansScreenForAppWidget extends StatefulWidget {
   const PlansScreenForAppWidget({Key? key}) : super(key: key);
@@ -61,20 +62,30 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               ),
             ],
           ),
-          isShowIncomeAlertDialog ? incomeAlertDialog() : SizedBox(),
-          isexpenseShowIncomeAlertDialog ? expenseAlertDialog() : SizedBox(),
+          isShowIncomeAlertDialog ? incomeAlertDialog() : const SizedBox(),
+          isexpenseShowIncomeAlertDialog
+              ? expenseAlertDialog()
+              : const SizedBox(),
         ],
       ),
     );
   }
 
   Widget plansimagecircle(BuildContext context, double widthh, double heighht) {
-    return Container(
-      width: widthh,
-      height: heighht,
-      decoration: BoxDecoration(
+    return ClipOval(
+      child: Container(
+        width: widthh,
+        height: heighht,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(999),
-          image: DecorationImage(image: NetworkImage(imageURLL))),
+        ),
+        child: CachedNetworkImage(
+          imageUrl: imageURLL,
+          placeholder: (context, url) => const CircularProgressIndicator(),
+          errorWidget: (context, url, error) => const Icon(Icons.attach_money),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
