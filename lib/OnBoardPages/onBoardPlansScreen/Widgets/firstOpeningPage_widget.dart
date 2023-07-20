@@ -69,32 +69,27 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
           ),
           const SizedBox(height: 10),
           addPlansImage(),
-          Text(
+          const Text(
             "Biriktirmek istediğiniz ürünün resmini seçin",
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Align(
             alignment: Alignment.bottomRight,
             child: InkWell(
               onTap: () async {
                 if (imagePath.isNotEmpty) {
-                  print('start');
                   List<String> imagePathList = imagePath.split('/');
                   await FirebaseStorage.instance
                       .ref('PlansImage')
                       .child(imagePathList[imagePathList.length - 1])
                       .putFile(File(imagePath));
-                  print('Resim Eklendi');
                   final imageUrl = await FirebaseStorage.instance
                       .ref(
                           'PlansImage/${imagePathList[imagePathList.length - 1]}')
                       .getDownloadURL();
                   imageURLL = imageUrl;
-                  print('İmage urlllllllllllllll:::$imageURLL');
-                } else {
-                  print('Resim seçilmedi.');
-                }
+                } else {}
 
                 addToDatabase();
               },
@@ -105,7 +100,7 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
                   color: Color(0xff4BAE4F),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     "Oluştur",
                     style: TextStyle(

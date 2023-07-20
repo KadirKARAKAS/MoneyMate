@@ -19,7 +19,7 @@ class _MainPageScreenState extends State<MainPageScreen> {
           height: size.height,
           color: Color(0xfff2f2f2),
         ),
-        PlansScreenForAppWidget()
+        const PlansScreenForAppWidget()
       ]),
     );
   }

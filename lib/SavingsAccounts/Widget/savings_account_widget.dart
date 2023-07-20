@@ -18,7 +18,7 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
         topBarWidget(context),
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.only(top: 3),
+            padding: const EdgeInsets.only(top: 3),
             shrinkWrap: true,
             itemCount: getdataList.length,
             itemBuilder: (context, index) {
@@ -32,7 +32,7 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MainPageScreen(),
+                        builder: (context) => const MainPageScreen(),
                       ));
                 },
               );

@@ -11,7 +11,7 @@ class SavingsAccountsPage extends StatefulWidget {
 class _SavingsAccountsPageState extends State<SavingsAccountsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SavingsAccountPageWidget(),
     );
   }

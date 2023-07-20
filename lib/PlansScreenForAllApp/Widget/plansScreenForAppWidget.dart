@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Widgets/plansAddPhoto_widget.dart';
-import 'package:moneymate/SavingsAccounts/Pages/savings_accounts.dart';
 import 'package:moneymate/SettingsPage/Pages/settings_page_main.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
