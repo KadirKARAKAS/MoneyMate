@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:moneymate/OnBoardPages/onBoardPlansScreen/Widgets/plansAddPhoto_widget.dart';
+import 'package:moneymate/SavingsAccounts/Pages/savings_accounts.dart';
 import 'package:moneymate/SettingsPage/Pages/settings_page_main.dart';
 import 'package:moneymate/Utils/constants.dart';
 
@@ -176,7 +178,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
 
   Widget finaloperations() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, top: 70),
+      padding: const EdgeInsets.only(left: 10, top: 30),
       child: Row(
         children: [
           Align(
@@ -546,7 +548,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SettingsPage(),
+                  builder: (context) => PlansAddPhoto(),
                 ),
               );
             },

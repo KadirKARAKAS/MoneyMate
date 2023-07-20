@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../PlansScreenForAllApp/Pages/mainPage.dart';
 import 'package:moneymate/Utils/constants.dart';
 
@@ -11,6 +15,10 @@ class FirstOpeningPageWidget extends StatefulWidget {
 }
 
 class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
+  final ImagePicker imagePicker = ImagePicker();
+  String imagePath = '';
+  final ImagePicker picker = ImagePicker();
+  String selectedImagePath = '';
   final TextEditingController textFieldController1 = TextEditingController();
   final TextEditingController textFieldController2 = TextEditingController();
   late TextEditingController textEditingControllerTest;
@@ -60,23 +68,43 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
             ),
           ),
           const SizedBox(height: 10),
+          addPlansImage(),
+          Text(
+            "Biriktirmek istediğiniz ürünün resmini seçin",
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+          ),
+          SizedBox(height: 20),
           Align(
             alignment: Alignment.bottomRight,
-            child: Container(
-              width: size.width / 3,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Color(0xff4BAE4F),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextButton(
-                onPressed: addToDatabase,
-                child: const Text(
-                  'Hesap oluştur',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            child: InkWell(
+              onTap: () async {
+                if (imagePath.isNotEmpty) {
+                  print('start');
+                  List<String> imagePathList = imagePath.split('/');
+                  await FirebaseStorage.instance
+                      .ref('PlansImage')
+                      .child(imagePathList[imagePathList.length - 1])
+                      .putFile(File(imagePath));
+                  print('Resim Eklendi');
+                } else {
+                  print('Resim seçilmedi.');
+                }
+                addToDatabase();
+              },
+              child: Container(
+                width: size.width / 3,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xff4BAE4F),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    "Oluştur",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -156,5 +184,43 @@ class _FirstOpeningPageWidgetState extends State<FirstOpeningPageWidget> {
                 ))),
       ),
     ]);
+  }
+
+  ClipOval addPlansImage() {
+    return ClipOval(
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          onTapFunction();
+        },
+        child: Container(
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: imagePath == ''
+              ? const Icon(
+                  Icons.image,
+                  size: 55,
+                )
+              : Image.file(
+                  File(imagePath),
+                  fit: BoxFit.cover,
+                ),
+        ),
+      ),
+    );
+  }
+
+  onTapFunction() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      imagePath = image.path;
+      setState(() {});
+    }
   }
 }
