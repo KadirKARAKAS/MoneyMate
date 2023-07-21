@@ -51,8 +51,8 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
           width: size.width,
           height: 80,
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 40, bottom: 40),
+        const Padding(
+          padding: EdgeInsets.only(top: 40, bottom: 40),
           child: Center(
             child: Text(
               "Birikim Hesaplarım",
@@ -68,7 +68,7 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_outlined,
                 size: 32,
               ),
@@ -108,7 +108,7 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.circle,
                         size: 10,
                       ),
@@ -116,7 +116,7 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
                         padding: const EdgeInsets.only(left: 10, top: 3),
                         child: Text(
                           containerText,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -125,8 +125,8 @@ class _SavingsAccountPageWidgetState extends State<SavingsAccountPageWidget> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10, top: 3),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 10, top: 3),
                     // child: Row(
                     //   children: [
                     //     Container(

@@ -480,7 +480,7 @@ class _PlansScreenForAppWidgetState extends State<PlansScreenForAppWidget> {
 
   Widget expensefinalOperationsContainer(int index) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
