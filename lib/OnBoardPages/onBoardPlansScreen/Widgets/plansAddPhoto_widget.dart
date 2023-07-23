@@ -24,7 +24,7 @@ class _PlansAddPhotoState extends State<PlansAddPhoto> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           addPlansImage(),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           InkWell(
             onTap: () async {
               if (imagePath.isNotEmpty) {
