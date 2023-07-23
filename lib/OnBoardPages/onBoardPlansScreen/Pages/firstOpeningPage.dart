@@ -16,7 +16,7 @@ class _FirstOpeningPageState extends State<FirstOpeningPage> {
       body: Column(
         children: [
           if (firstpageBackbutton) topBorWidget(context),
-          Center(child: FirstOpeningPageWidget()),
+          const Center(child: FirstOpeningPageWidget()),
         ],
       ),
     );
@@ -29,7 +29,7 @@ class _FirstOpeningPageState extends State<FirstOpeningPage> {
         width: size.width,
         height: 80,
       ),
-      Padding(
+      const Padding(
         padding: const EdgeInsets.only(top: 40, bottom: 40),
         child: Center(
           child: Text(
@@ -46,7 +46,7 @@ class _FirstOpeningPageState extends State<FirstOpeningPage> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_outlined,
               size: 32,
             ),

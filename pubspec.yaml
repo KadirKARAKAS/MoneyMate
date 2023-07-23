@@ -43,6 +43,7 @@ dependencies:
   image_picker: ^1.0.1
   firebase_storage: ^11.2.4
   cached_network_image: ^3.2.3
+  firebase_auth: ^4.7.1
 
 
 
