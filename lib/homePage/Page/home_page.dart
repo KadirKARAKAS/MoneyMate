@@ -6,12 +6,17 @@ import 'package:moneymate/topBar_Widget.dart';
 
 class HomePagePlans extends StatefulWidget {
   const HomePagePlans({super.key});
-
   @override
   State<HomePagePlans> createState() => _HomePagePlansState();
 }
 
 class _HomePagePlansState extends State<HomePagePlans> {
+  @override
+  void initState() {
+    super.initState();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +27,7 @@ class _HomePagePlansState extends State<HomePagePlans> {
             children: [
               SizedBox(height: 50),
               HomePagePlansPhotoWidget(),
-              SizedBox(height: 30),
+              SizedBox(height: 20),
               HomePageBalanceRowWidget(),
             ],
           )

@@ -191,7 +191,6 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
   }
 
   Future<void> addToDatabase() async {
-    Size size = MediaQuery.of(context).size;
     String accountName = accountNameController.text;
     String targetValue = targetValueController.text;
 
@@ -231,16 +230,6 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
           .update({'docId': doc.id});
       getdataList.add(doc.data());
     });
-    final userReff = FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans");
-    final querySnapshotPets = await userReff.get();
-    getdataList.clear();
-    querySnapshotPets.docs.forEach((doc) {
-      getdataList.add(doc.data());
-    });
-
     Future.delayed(const Duration(milliseconds: 500), () {
       getdataList.isEmpty
           ? AlertDialog(

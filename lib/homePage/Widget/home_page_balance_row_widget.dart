@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/expense&incomePage/Page/expense_income_page.dart';
 
 class HomePageBalanceRowWidget extends StatelessWidget {
   const HomePageBalanceRowWidget({super.key});
@@ -9,10 +10,21 @@ class HomePageBalanceRowWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Image(
-          image: AssetImage("assets/expenseplus.png"),
-          width: 50,
-          height: 50,
+        InkWell(
+          onTap: () {
+            expenseOrIncome = "Expense";
+            expenseOrIncomeBool = false;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ExpenseIncomePage(),
+                ));
+          },
+          child: const Image(
+            image: AssetImage("assets/expenseplus.png"),
+            width: 50,
+            height: 50,
+          ),
         ),
         const SizedBox(width: 30),
         Text(
@@ -20,10 +32,21 @@ class HomePageBalanceRowWidget extends StatelessWidget {
           style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
         ),
         const SizedBox(width: 30),
-        const Image(
-          image: AssetImage("assets/incomeplus.png"),
-          width: 50,
-          height: 50,
+        InkWell(
+          onTap: () {
+            expenseOrIncome = "Income";
+            expenseOrIncomeBool = true;
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ExpenseIncomePage(),
+                ));
+          },
+          child: const Image(
+            image: AssetImage("assets/incomeplus.png"),
+            width: 50,
+            height: 50,
+          ),
         )
       ],
     );

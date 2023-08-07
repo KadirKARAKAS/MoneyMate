@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
             top: 0,
             left: 0,
             right: 0,
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Lottie.asset(
                 "assets/splashPageLottie.json",
