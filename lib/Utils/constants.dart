@@ -20,5 +20,6 @@ int balance = 0;
 //bool
 bool firstpageBackbutton = false;
 bool isVisible = false;
-
+bool circleBool = false;
 int selectedIndex = 0;
+int startingIndex = 0;

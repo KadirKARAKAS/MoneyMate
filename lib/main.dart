@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
-import 'package:moneymate/splash_screen.dart';
-import 'package:moneymate/testpage.dart';
+import 'package:moneymate/homePage/Page/home_page.dart';
+
+import 'splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,7 @@ Future<void> main() async {
     home: SplashScreen(),
   ));
   Firebase.initializeApp();
-  await Future.delayed(Duration(milliseconds: 3500));
+  await Future.delayed(const Duration(milliseconds: 3500));
   handleAppStart();
 }
 
@@ -35,8 +36,8 @@ Future<void> handleAppStart() async {
       home: AddPlanPage(),
     ));
   } else {
-    // runApp(const MaterialApp(
-    //   home: TestPage(),
-    // ));
+    runApp(const MaterialApp(
+      home: HomePagePlans(),
+    ));
   }
 }
