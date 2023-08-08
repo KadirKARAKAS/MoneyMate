@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:moneymate/models/savings_account.dart';
 
 //List
 List<Map<String, dynamic>> getdataList = [];
@@ -32,3 +33,6 @@ String valueQuantity = "";
 bool expenseOrIncomeBool = false;
 ValueNotifier<int> valueNotifierX = ValueNotifier(0);
 Map<String, List<Map<String, dynamic>>> paymentDataCache = {};
+List<SavingsAccount> savingsAccounts = [];
+int startValue = 0;
+int deneme = 0;

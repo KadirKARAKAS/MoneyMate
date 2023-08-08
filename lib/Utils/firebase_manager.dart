@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/models/savings_account.dart';
 
 class FBManager {
   static Future<List<Map<String, dynamic>>> receivePaymentDetails(
@@ -48,8 +49,13 @@ class FBManager {
 
     final querySnapshot = await userRef.get();
     getdataList.clear();
+    savingsAccounts.clear();
     querySnapshot.docs.forEach((doc) async {
       getdataList.add(doc.data());
+      savingsAccounts.add(SavingsAccount.fromMap(doc.data()));
     });
+    for (var element in savingsAccounts) {
+      print(element.name);
+    }
   }
 }

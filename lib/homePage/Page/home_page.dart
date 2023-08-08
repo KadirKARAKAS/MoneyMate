@@ -27,10 +27,10 @@ class _HomePagePlansState extends State<HomePagePlans> {
       print(element);
     }
     await FBManager.updatePaymentList();
-    // List l = await FBManager.receivePaymentDetails(widget.docId);
-    // for (var element in l) {
-    //   incomeOrExpenseList.add(element);
-    // }
+    List l = await FBManager.receivePaymentDetails(widget.docId);
+    for (var element in l) {
+      incomeOrExpenseList.add(element);
+    }
 
     valueNotifierX.value += 1;
   }

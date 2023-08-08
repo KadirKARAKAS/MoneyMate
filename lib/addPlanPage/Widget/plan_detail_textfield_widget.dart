@@ -49,6 +49,7 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
           onTap: () async {
             await storageSave();
             await addToDatabase();
+            navigate();
           },
           child: Container(
             width: 90,
@@ -75,6 +76,25 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
         ),
       ],
     );
+  }
+
+  Future<Null> navigate() {
+    return Future.delayed(const Duration(milliseconds: 500), () {
+      getdataList.isEmpty
+          ? const AlertDialog(
+              actions: [],
+            )
+          : setState(() {
+              circleBool = false;
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePagePlans(
+                      docId: getdataList[startingIndex]["docId"],
+                    ),
+                  ));
+            });
+    });
   }
 
   Container savingAccountdetailcontainer(Size size, String containerText,
@@ -194,8 +214,10 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
   Future<void> addToDatabase() async {
     String accountName = accountNameController.text;
     String targetValue = targetValueController.text;
+    int startingValue = startValue;
 
     final savingAccount = {
+      "StartingValue": startingValue,
       "AccountName": accountName,
       "TargetValue": targetValue,
       "PetsPhotoURL": imageURLL,
@@ -215,39 +237,5 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
     selectedImagePath = "";
     await FBManager.updatePlanList();
     startingIndex = 0;
-
-    // final userRef = FirebaseFirestore.instance
-    //     .collection("Users")
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection("My Plans")
-    //     .orderBy('createdTime', descending: true);
-
-    // final querySnapshot = await userRef.get();
-    // getdataList.clear();
-    // querySnapshot.docs.forEach((doc) async {
-    //   await FirebaseFirestore.instance
-    //       .collection('Users')
-    //       .doc(FirebaseAuth.instance.currentUser!.uid)
-    //       .collection("My Plans")
-    //       .doc(doc.id)
-    //       .update({'docId': doc.id});
-    //   getdataList.add(doc.data());
-    // });
-    Future.delayed(const Duration(milliseconds: 500), () {
-      getdataList.isEmpty
-          ? const AlertDialog(
-              actions: [],
-            )
-          : setState(() {
-              circleBool = false;
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePagePlans(
-                      docId: getdataList[startingIndex]["docId"],
-                    ),
-                  ));
-            });
-    });
   }
 }

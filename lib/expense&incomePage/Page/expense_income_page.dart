@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
+import 'package:moneymate/homePage/Page/home_page.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
 class ExpenseIncomePage extends StatefulWidget {
@@ -38,7 +39,26 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: addToDatabase,
+                    onTap: () async {
+                      deneme = getdataList[startingIndex]["StartingValue"];
+                      22 + deneme;
+                      print(deneme);
+
+                      // await addToDatabase();
+                      setState(() {
+                        Future.delayed(const Duration(milliseconds: 400), () {
+                          valueNotifierX.value += 1;
+                        });
+                        circleBool = false;
+                        expenseOrIncomeController.clear();
+                        // Navigator.pushReplacement(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => HomePagePlans(
+                        //           docId: getdataList[startingIndex]["docId"]),
+                        //     ));
+                      });
+                    },
                     child: Container(
                       width: 100,
                       height: 40,
@@ -161,15 +181,6 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
       incomeExpenseSnapshot.docs.forEach((doc) {
         incomeOrExpenseList.add(doc.data());
       });
-    });
-
-    setState(() {
-      Future.delayed(const Duration(milliseconds: 400), () {
-        valueNotifierX.value += 1;
-      });
-      circleBool = false;
-      expenseOrIncomeController.clear();
-      Navigator.pop(context);
     });
   }
 }

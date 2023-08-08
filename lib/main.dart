@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
 import 'package:moneymate/homePage/Page/home_page.dart';
 
@@ -70,6 +71,7 @@ Future<void> handleAppStart() async {
       });
     });
   }
+  await FBManager.updatePlanList();
 
   await Future.delayed(
     const Duration(milliseconds: 1000),

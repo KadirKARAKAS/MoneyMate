@@ -31,7 +31,7 @@ class HomePageBalanceRowWidget extends StatelessWidget {
               ),
               const SizedBox(width: 30),
               Text(
-                getdataList[startingIndex]["TargetValue"],
+                getdataList[startingIndex]["StartingValue"].toString(),
                 style:
                     const TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
               ),
