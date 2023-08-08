@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'settingsPage/Page/settings_page.dart';
-
-class TopBarWidget extends StatelessWidget {
-  const TopBarWidget({super.key, required this.titleText});
+class TopBarWidgetBackButton extends StatelessWidget {
+  const TopBarWidgetBackButton({super.key, required this.titleText});
   final String titleText;
   @override
   Widget build(BuildContext context) {
@@ -21,19 +19,15 @@ class TopBarWidget extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 6,
-            right: 10,
+            top: 3,
+            left: 10,
             child: InkWell(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
-                    ));
+                Navigator.pop(context);
               },
               child: const Icon(
-                Icons.settings,
-                size: 23,
+                Icons.navigate_before,
+                size: 33,
               ),
             ),
           ),

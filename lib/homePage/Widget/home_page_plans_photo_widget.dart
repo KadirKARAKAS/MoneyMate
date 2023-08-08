@@ -7,26 +7,30 @@ class HomePagePlansPhotoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 150,
-      height: 150,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(999),
-        child: CachedNetworkImage(
-          imageUrl: getdataList[startingIndex]["PetsPhotoURL"],
-          fit: BoxFit.cover,
-          placeholder: (context, url) => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          errorWidget: (context, url, error) => const Icon(
-            Icons.error,
-            size: 50,
-          ),
-        ),
-      ),
-    );
+    return ValueListenableBuilder(
+        valueListenable: valueNotifierX,
+        builder: (context, value, child) {
+          return Container(
+            width: 150,
+            height: 150,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(999),
+              child: CachedNetworkImage(
+                imageUrl: getdataList[startingIndex]["PetsPhotoURL"],
+                fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                errorWidget: (context, url, error) => const Icon(
+                  Icons.error,
+                  size: 50,
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

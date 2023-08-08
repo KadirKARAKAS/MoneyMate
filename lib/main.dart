@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,35 +50,35 @@ Future<void> handleAppStart() async {
           .update({'docId': doc.id});
       getdataList.add(doc.data() as Map<String, dynamic>);
     });
-    // GETDATA LİST ÇEKME İŞLEMİ TAMAMLANDI
+    final userReff = FirebaseFirestore.instance
+        .collection("Users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("My Plans");
 
-    // HİSTORY LİST ÇEKME İŞLEMİ BAŞLADI
-    if (getdataList.isNotEmpty) {
-      final userReff = FirebaseFirestore.instance
-          .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("My Plans")
-          .doc(getdataList[startingIndex]["docId"])
+    final querySnapshott = await userReff.get();
+
+    incomeOrExpenseList.clear();
+    await Future.forEach(querySnapshott.docs, (planDoc) async {
+      final incomeExpenseRef = planDoc.reference
           .collection("Income&Expense")
           .orderBy('createdTime', descending: true);
 
-      final querySnapshott = await userReff.get();
-      querySnapshott.docs.forEach((doc) {
-        incomeOrExpenseList.add(doc.data() as Map<String, dynamic>);
+      final incomeExpenseSnapshot = await incomeExpenseRef.get();
+
+      incomeExpenseSnapshot.docs.forEach((doc) {
+        incomeOrExpenseList.add(doc.data());
       });
-      // HİSTORY LİST ÇEKME İŞLEMİ TAMAMLANDI
-    }
-
-    // HER İHTİMALE KARŞI 500 MS BEKLENİYOR
-    await Future.delayed(
-      const Duration(milliseconds: 1000),
-      () {
-        valueNotifierX.value += 1;
-
-        runApp(MaterialApp(
-          home: getdataList.isNotEmpty ? HomePagePlans() : AddPlanPage(),
-        ));
-      },
-    );
+    });
   }
+
+  await Future.delayed(
+    const Duration(milliseconds: 1000),
+    () {
+      valueNotifierX.value += 1;
+
+      runApp(MaterialApp(
+        home: getdataList.isNotEmpty ? HomePagePlans() : AddPlanPage(),
+      ));
+    },
+  );
 }

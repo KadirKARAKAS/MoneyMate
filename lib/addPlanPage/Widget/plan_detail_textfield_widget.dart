@@ -232,7 +232,7 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
     });
     Future.delayed(const Duration(milliseconds: 500), () {
       getdataList.isEmpty
-          ? AlertDialog(
+          ? const AlertDialog(
               actions: [],
             )
           : setState(() {
