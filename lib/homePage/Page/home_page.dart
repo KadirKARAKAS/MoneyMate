@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/homePage/Widget/home_page_balance_row_widget.dart';
@@ -37,7 +35,7 @@ class _HomePagePlansState extends State<HomePagePlans> {
                   const SizedBox(height: 20),
                   const HomePageBalanceRowWidget(),
                   const SizedBox(height: 40),
-                  const HomePageDocumentHistoruListview(),
+                  HomePageDocumentHistoruListview(),
                 ],
               ),
             ),

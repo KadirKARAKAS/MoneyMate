@@ -7,48 +7,53 @@ class HomePageBalanceRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        InkWell(
-          onTap: () {
-            expenseOrIncome = "Expense";
-            expenseOrIncomeBool = false;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ExpenseIncomePage(),
-                ));
-          },
-          child: const Image(
-            image: AssetImage("assets/expenseplus.png"),
-            width: 50,
-            height: 50,
-          ),
-        ),
-        const SizedBox(width: 30),
-        Text(
-          getdataList[startingIndex]["TargetValue"],
-          style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(width: 30),
-        InkWell(
-          onTap: () {
-            expenseOrIncome = "Income";
-            expenseOrIncomeBool = true;
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ExpenseIncomePage(),
-                ));
-          },
-          child: const Image(
-            image: AssetImage("assets/incomeplus.png"),
-            width: 50,
-            height: 50,
-          ),
-        )
-      ],
-    );
+    return ValueListenableBuilder(
+        valueListenable: valueNotifierX,
+        builder: (context, value, child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: () {
+                  expenseOrIncome = "Expense";
+                  expenseOrIncomeBool = false;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ExpenseIncomePage(),
+                      ));
+                },
+                child: const Image(
+                  image: AssetImage("assets/expenseplus.png"),
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+              const SizedBox(width: 30),
+              Text(
+                getdataList[startingIndex]["TargetValue"],
+                style:
+                    const TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(width: 30),
+              InkWell(
+                onTap: () {
+                  expenseOrIncome = "Income";
+                  expenseOrIncomeBool = true;
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ExpenseIncomePage(),
+                      ));
+                },
+                child: const Image(
+                  image: AssetImage("assets/incomeplus.png"),
+                  width: 50,
+                  height: 50,
+                ),
+              )
+            ],
+          );
+        });
   }
 }

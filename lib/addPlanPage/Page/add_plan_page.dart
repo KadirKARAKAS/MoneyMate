@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneymate/addPlanPage/Widget/plan_detail_textfield_widget.dart';
-import 'package:moneymate/topBar_Widget.dart';
+import 'package:moneymate/topBar_Widget%20basic.dart';
 
 class AddPlanPage extends StatefulWidget {
   const AddPlanPage({super.key});
@@ -12,10 +12,10 @@ class AddPlanPage extends StatefulWidget {
 class _AddPlanPageState extends State<AddPlanPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: Column(
       children: [
-        TopBarWidget(titleText: "Add Saving Account"),
+        TopBarWidgetBasic(titleText: "Add Saving Account"),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
