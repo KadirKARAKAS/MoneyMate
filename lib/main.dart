@@ -6,10 +6,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
-import 'package:moneymate/expense&incomePage/Page/expense_income_page.dart';
 import 'package:moneymate/homePage/Page/home_page.dart';
 
 import 'splash_screen.dart';
+
+// ... diğer import bildirimleri ...
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +19,7 @@ Future<void> main() async {
     home: SplashScreen(),
   ));
   Firebase.initializeApp();
-  await Future.delayed(const Duration(milliseconds: 3500));
-  handleAppStart();
+  await handleAppStart();
 }
 
 Future<void> handleAppStart() async {
@@ -33,12 +33,8 @@ Future<void> handleAppStart() async {
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(mapSaveData);
-
-    runApp(const MaterialApp(
-      home: AddPlanPage(),
-    ));
   } else {
-    //GETDATA LİST ÇEKME İŞLEMİ BAŞLADI
+    // GETDATA LİST ÇEKME İŞLEMİ BAŞLADI
     final userRef = FirebaseFirestore.instance
         .collection("Users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -46,7 +42,6 @@ Future<void> handleAppStart() async {
         .orderBy('createdTime', descending: true);
 
     final querySnapshot = await userRef.get();
-    getdataList.clear();
     querySnapshot.docs.forEach((doc) async {
       await FirebaseFirestore.instance
           .collection('Users')
@@ -54,22 +49,37 @@ Future<void> handleAppStart() async {
           .collection("My Plans")
           .doc(doc.id)
           .update({'docId': doc.id});
-      getdataList.add(doc.data());
+      getdataList.add(doc.data() as Map<String, dynamic>);
     });
-    Future.delayed(
-      const Duration(seconds: 2),
+    // GETDATA LİST ÇEKME İŞLEMİ TAMAMLANDI
+
+    // HİSTORY LİST ÇEKME İŞLEMİ BAŞLADI
+    if (getdataList.isNotEmpty) {
+      final userReff = FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("My Plans")
+          .doc(getdataList[startingIndex]["docId"])
+          .collection("Income&Expense")
+          .orderBy('createdTime', descending: true);
+
+      final querySnapshott = await userReff.get();
+      querySnapshott.docs.forEach((doc) {
+        incomeOrExpenseList.add(doc.data() as Map<String, dynamic>);
+      });
+      // HİSTORY LİST ÇEKME İŞLEMİ TAMAMLANDI
+    }
+
+    // HER İHTİMALE KARŞI 500 MS BEKLENİYOR
+    await Future.delayed(
+      const Duration(milliseconds: 1000),
       () {
-        print("2SANİYE BEKLENİYOR");
-        getdataList.isEmpty
-            ? runApp(const MaterialApp(
-                home: ExpenseIncomePage(),
-              ))
-            : runApp(const MaterialApp(
-                home: HomePagePlans(),
-              ));
+        valueNotifierX.value += 1;
+
+        runApp(MaterialApp(
+          home: getdataList.isNotEmpty ? HomePagePlans() : AddPlanPage(),
+        ));
       },
     );
-    //GETDATA LİST ÇEKME İŞLEMİ TAMAMLANDI
-    //HER İHTİMALE KARŞI 500 MS BEKLENİYOR
   }
 }

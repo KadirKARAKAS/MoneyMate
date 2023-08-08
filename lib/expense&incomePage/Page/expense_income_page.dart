@@ -24,72 +24,85 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
           TopBarWidget(titleText: expenseOrIncome),
           const SizedBox(height: 200),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  savingAccountdetailcontainer(
-                      size,
-                      "Enter the amount $expenseOrIncome",
-                      expenseOrIncomeController,
-                      TextInputType.number),
-                  const SizedBox(height: 15),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () {
-                        addToDatabase();
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color:
-                              expenseOrIncomeBool ? Colors.green : Colors.red,
-                        ),
-                        child: const Center(
-                            child: Text(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                savingAccountdetailcontainer(
+                  size,
+                  "Enter the amount $expenseOrIncome",
+                  expenseOrIncomeController,
+                  TextInputType.number,
+                ),
+                const SizedBox(height: 15),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: addToDatabase,
+                    child: Container(
+                      width: 100,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: expenseOrIncomeBool ? Colors.green : Colors.red,
+                      ),
+                      child: const Center(
+                        child: Text(
                           "Add",
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        )),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Container savingAccountdetailcontainer(Size size, String containerText,
-      TextEditingController controllerr, TextInputType keyboard) {
+  Container savingAccountdetailcontainer(
+    Size size,
+    String containerText,
+    TextEditingController controllerr,
+    TextInputType keyboard,
+  ) {
     return Container(
       width: size.width,
       height: 55,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-          border: Border.all(width: 0.3, color: const Color(0xff979797)),
-          boxShadow: const [
-            BoxShadow(
-                blurRadius: 1, color: Colors.black26, offset: Offset(-2, 2))
-          ]),
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+        border: Border.all(width: 0.3, color: const Color(0xff979797)),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 1,
+            color: Colors.black26,
+            offset: Offset(-2, 2),
+          ),
+        ],
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Align(
           alignment: Alignment.centerLeft,
           child: TextField(
-              keyboardType: keyboard,
-              controller: controllerr,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: containerText,
-                  hintStyle: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xff979797)))),
+            keyboardType: keyboard,
+            controller: controllerr,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: containerText,
+              hintStyle: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w500,
+                color: Color(0xff979797),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -99,51 +112,51 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
     String value = expenseOrIncomeController.text;
 
     final savingAccount = {
-      expenseOrIncome: value,
-      'createdTime': DateTime.now()
+      "Value": value,
+      "ValueType": expenseOrIncomeBool,
+      'createdTime': DateTime.now(),
     };
 
-    final docRef = await FirebaseFirestore.instance
+    // Yeni veriyi Firebase'e ekleyin ve belge referansını alın
+    await FirebaseFirestore.instance
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("My Plans")
         .doc(getdataList[startingIndex]["docId"])
         .collection("Income&Expense")
         .add(savingAccount);
+    // Firebase'den veriyi çekerek listenizi güncelleyin
+    await fetchIncomeAndExpenseData();
+  }
 
-    // Oluşturulan belgeye docID ekleme aşaması
-    await docRef.update({'docId': docRef.id});
-    expenseOrIncomeController.clear();
-
+  Future<void> fetchIncomeAndExpenseData() async {
     final userRef = FirebaseFirestore.instance
         .collection("Users")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans")
-        .doc(getdataList[startingIndex]["docId"])
-        .collection("Income&Expense")
-        .orderBy('createdTime', descending: true);
+        .collection("My Plans");
 
     final querySnapshot = await userRef.get();
-    incomeOrExpense.clear();
-    querySnapshot.docs.forEach((doc) async {
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("My Plans")
-          .doc(getdataList[startingIndex]["docId"])
-          .collection("Income&Expense");
 
-      incomeOrExpense.add(doc.data());
+    incomeOrExpenseList.clear();
+    await Future.forEach(querySnapshot.docs, (planDoc) async {
+      final incomeExpenseRef = planDoc.reference
+          .collection("Income&Expense")
+          .orderBy('createdTime', descending: true);
+
+      final incomeExpenseSnapshot = await incomeExpenseRef.get();
+
+      incomeExpenseSnapshot.docs.forEach((doc) {
+        incomeOrExpenseList.add(doc.data());
+      });
     });
-    Future.delayed(const Duration(milliseconds: 500), () {
-      incomeOrExpense.isEmpty
-          ? AlertDialog(
-              actions: [],
-            )
-          : setState(() {
-              circleBool = false;
-              Navigator.pop(context);
-            });
+
+    setState(() {
+      Future.delayed(const Duration(milliseconds: 400), () {
+        valueNotifierX.value += 1;
+      });
+      circleBool = false;
+      expenseOrIncomeController.clear();
+      Navigator.pop(context);
     });
   }
 }

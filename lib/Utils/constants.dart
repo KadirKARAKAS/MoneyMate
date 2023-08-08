@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 //List
 List<Map<String, dynamic>> getdataList = [];
 List<Map<String, dynamic>> incomedataList = [];
-List<Map<String, dynamic>> incomeOrExpense = [];
+List<Map<String, dynamic>> incomeOrExpenseList = [];
 
 //controller
 final TextEditingController incomeTextController = TextEditingController();
@@ -28,4 +28,6 @@ int startingIndex = 0;
 String topBarTitle = "";
 String startingTargetValue = "";
 String expenseOrIncome = "";
+String valueQuantity = "";
 bool expenseOrIncomeBool = false;
+ValueNotifier<int> valueNotifierX = ValueNotifier(0);
