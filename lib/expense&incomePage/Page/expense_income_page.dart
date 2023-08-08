@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
 class ExpenseIncomePage extends StatefulWidget {
@@ -125,8 +126,20 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
         .doc(getdataList[startingIndex]["docId"])
         .collection("Income&Expense")
         .add(savingAccount);
+    if (paymentDataCache.containsKey(getdataList[startingIndex]["docId"])) {
+      paymentDataCache.remove(getdataList[startingIndex]["docId"]);
+    }
+    await FBManager.updatePaymentList();
+    // await FBManager.receivePaymentDetails(getdataList[startingIndex]["docId"]);
     // Firebase'den veriyi çekerek listenizi güncelleyin
-    await fetchIncomeAndExpenseData();
+    // await fetchIncomeAndExpenseData();
+    setState(() {
+      Future.delayed(const Duration(milliseconds: 400), () {});
+      circleBool = false;
+      expenseOrIncomeController.clear();
+      Navigator.pop(context);
+      valueNotifierX.value += 1;
+    });
   }
 
   Future<void> fetchIncomeAndExpenseData() async {

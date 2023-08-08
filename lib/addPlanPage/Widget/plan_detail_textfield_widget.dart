@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moneymate/Utils/constants.dart';
+import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/homePage/Page/home_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -212,24 +213,26 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
     accountNameController.clear();
     targetValueController.clear();
     selectedImagePath = "";
+    await FBManager.updatePlanList();
+    startingIndex = 0;
 
-    final userRef = FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans")
-        .orderBy('createdTime', descending: true);
+    // final userRef = FirebaseFirestore.instance
+    //     .collection("Users")
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection("My Plans")
+    //     .orderBy('createdTime', descending: true);
 
-    final querySnapshot = await userRef.get();
-    getdataList.clear();
-    querySnapshot.docs.forEach((doc) async {
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("My Plans")
-          .doc(doc.id)
-          .update({'docId': doc.id});
-      getdataList.add(doc.data());
-    });
+    // final querySnapshot = await userRef.get();
+    // getdataList.clear();
+    // querySnapshot.docs.forEach((doc) async {
+    //   await FirebaseFirestore.instance
+    //       .collection('Users')
+    //       .doc(FirebaseAuth.instance.currentUser!.uid)
+    //       .collection("My Plans")
+    //       .doc(doc.id)
+    //       .update({'docId': doc.id});
+    //   getdataList.add(doc.data());
+    // });
     Future.delayed(const Duration(milliseconds: 500), () {
       getdataList.isEmpty
           ? const AlertDialog(

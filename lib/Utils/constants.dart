@@ -31,3 +31,4 @@ String expenseOrIncome = "";
 String valueQuantity = "";
 bool expenseOrIncomeBool = false;
 ValueNotifier<int> valueNotifierX = ValueNotifier(0);
+Map<String, List<Map<String, dynamic>>> paymentDataCache = {};
