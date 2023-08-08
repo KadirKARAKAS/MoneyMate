@@ -240,7 +240,9 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const HomePagePlans(),
+                    builder: (context) => HomePagePlans(
+                      docId: getdataList[startingIndex]["docId"],
+                    ),
                   ));
             });
     });

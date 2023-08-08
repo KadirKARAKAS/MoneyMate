@@ -77,7 +77,9 @@ Future<void> handleAppStart() async {
       valueNotifierX.value += 1;
 
       runApp(MaterialApp(
-        home: getdataList.isNotEmpty ? HomePagePlans() : AddPlanPage(),
+        home: getdataList.isNotEmpty
+            ? HomePagePlans(docId: getdataList[startingIndex]["docId"])
+            : AddPlanPage(),
       ));
     },
   );
