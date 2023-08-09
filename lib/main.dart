@@ -18,7 +18,6 @@ Future<void> main() async {
   runApp(const MaterialApp(
     home: SplashScreen(),
   ));
-  Firebase.initializeApp();
   await handleAppStart();
 }
 

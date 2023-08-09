@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
@@ -24,10 +26,36 @@ class SavingsAccountTopDetails extends StatelessWidget {
   }
 }
 
-class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
+class SavingsAccountPageBalanceRowWidget extends StatefulWidget {
   const SavingsAccountPageBalanceRowWidget(
       {super.key, required this.savingsAccount});
   final SavingsAccount savingsAccount;
+
+  @override
+  State<SavingsAccountPageBalanceRowWidget> createState() =>
+      _SavingsAccountPageBalanceRowWidgetState();
+}
+
+class _SavingsAccountPageBalanceRowWidgetState
+    extends State<SavingsAccountPageBalanceRowWidget>
+    with TickerProviderStateMixin {
+  late AnimationController ac;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    ac = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1500));
+
+    ac.forward(from: 0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ac.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +70,7 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => MakeTransactionPage(
-                    savingsAccount: savingsAccount,
+                    savingsAccount: widget.savingsAccount,
                   ),
                 ));
           },
@@ -53,41 +81,70 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 20),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 30,
-                  width: 200 *
-                      (savingsAccount.balance / savingsAccount.targetValue),
-                  decoration: BoxDecoration(
-                      color: Colors.green.shade100,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15))),
+        AnimatedBuilder(
+            animation: ac,
+            builder: (context, child) {
+              return Container(
+                width: 200,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              height: 30,
+                              width: 200 *
+                                  min(
+                                      widget.savingsAccount.balance /
+                                          widget.savingsAccount.targetValue,
+                                      1),
+                              decoration: BoxDecoration(
+                                  color: Colors.red.shade100,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10))),
+                            ),
+                            Container(
+                              height: 30,
+                              width: 200 *
+                                  min(
+                                      widget.savingsAccount.balance /
+                                          widget.savingsAccount.targetValue,
+                                      1) *
+                                  ac.value as double,
+                              decoration:
+                                  coloredBalanceContainerDecoration(true),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 30,
+                          width: 200 *
+                              (1 -
+                                  min(
+                                      widget.savingsAccount.balance /
+                                          widget.savingsAccount.targetValue,
+                                      1)),
+                          decoration: coloredBalanceContainerDecoration(false),
+                        ),
+                      ],
+                    ),
+                    Center(
+                      child: Text(
+                        balanceDetails(),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(
+                                (255 * ac.value).toInt(), 0, 0, 0)),
+                      ),
+                    )
+                  ],
                 ),
-                Container(
-                  height: 30,
-                  width: 200 *
-                      (1 - savingsAccount.balance / savingsAccount.targetValue),
-                  decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15))),
-                ),
-              ],
-            ),
-            Center(
-              child: Text(
-                balanceDetails(),
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            )
-          ],
-        ),
+              );
+            }),
         const SizedBox(width: 20),
         InkWell(
           onTap: () {
@@ -97,7 +154,7 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => MakeTransactionPage(
-                    savingsAccount: savingsAccount,
+                    savingsAccount: widget.savingsAccount,
                   ),
                 ));
           },
@@ -111,10 +168,42 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
     );
   }
 
+  BoxDecoration coloredBalanceContainerDecoration(bool isLeftSide) {
+    double r = 10;
+    double topLeft = 0, topRight = 0, bottomLeft = 0, bottomRight = 0;
+    Color c = Colors.red.shade100;
+    num difference =
+        widget.savingsAccount.targetValue - widget.savingsAccount.balance;
+    if (isLeftSide) {
+      c = Colors.green.shade100;
+      topLeft = r;
+      bottomLeft = r;
+      if (difference <= 0) {
+        topRight = r;
+        bottomRight = r;
+      }
+    } else {
+      topRight = r;
+      bottomRight = r;
+      if (widget.savingsAccount.balance == 0) {
+        topLeft = r;
+        bottomLeft = r;
+      }
+    }
+
+    return BoxDecoration(
+        color: c,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(topRight),
+            bottomRight: Radius.circular(bottomRight),
+            topLeft: Radius.circular(topLeft),
+            bottomLeft: Radius.circular(bottomLeft)));
+  }
+
   String balanceDetails() {
-    return savingsAccount.balance.toString() +
+    return widget.savingsAccount.balance.toString() +
         " / " +
-        savingsAccount.targetValue.toString();
+        widget.savingsAccount.targetValue.toString();
   }
 }
 
