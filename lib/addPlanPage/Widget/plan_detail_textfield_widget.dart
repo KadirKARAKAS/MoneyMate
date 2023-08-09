@@ -26,17 +26,22 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Column(
+    return Stack(
       children: [
-        savingAccountdetailcontainer(size, "Savings account name",
-            accountNameController, TextInputType.name),
-        const SizedBox(height: 10),
-        savingAccountdetailcontainer(size, "Target amount you want to save",
-            targetValueController, TextInputType.number),
-        const SizedBox(height: 50),
-        addSavingAccountPhoto(context),
-        const SizedBox(height: 20),
-        saveContainerButton(),
+        Column(
+          children: [
+            savingAccountdetailcontainer(size, "Savings account name",
+                accountNameController, TextInputType.name),
+            const SizedBox(height: 10),
+            savingAccountdetailcontainer(size, "Target amount you want to save",
+                targetValueController, TextInputType.number),
+            const SizedBox(height: 50),
+            addSavingAccountPhoto(context),
+            const SizedBox(height: 20),
+            saveContainerButton(),
+          ],
+        ),
+        loadingCircle(size),
       ],
     );
   }
@@ -47,6 +52,9 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
       children: [
         InkWell(
           onTap: () async {
+            setState(() {
+              circleBool = true;
+            });
             await storageSave();
             await addToDatabase();
             navigate();
@@ -214,7 +222,7 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
   Future<void> addToDatabase() async {
     String accountName = accountNameController.text;
     String targetValue = targetValueController.text;
-    int startingValue = startValue;
+    num startingValue = startValue;
 
     final savingAccount = {
       "StartingValue": startingValue,
@@ -237,5 +245,30 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
     selectedImagePath = "";
     await FBManager.updatePlanList();
     startingIndex = 0;
+  }
+
+  Stack loadingCircle(Size size) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (circleBool)
+          Container(
+            width: size.width,
+            height: size.height - 200,
+            color: Colors.transparent,
+          ),
+        circleBool
+            ? const SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 10,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff60F9FF)),
+                ),
+              )
+            : const SizedBox(),
+      ],
+    );
   }
 }

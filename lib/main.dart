@@ -7,6 +7,7 @@ import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
 import 'package:moneymate/homePage/Page/home_page.dart';
+import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
 
 import 'splash_screen.dart';
 
@@ -80,7 +81,9 @@ Future<void> handleAppStart() async {
 
       runApp(MaterialApp(
         home: getdataList.isNotEmpty
-            ? HomePagePlans(docId: getdataList[startingIndex]["docId"])
+            ? SavingsAccountDetailsPage(
+                savingsAccount: savingsAccounts.first,
+              )
             : AddPlanPage(),
       ));
     },

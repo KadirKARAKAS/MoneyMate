@@ -7,7 +7,7 @@ import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
 class SavingsAccountDetailsPage extends StatefulWidget {
-  const SavingsAccountDetailsPage({super.key, required this.savingsAccount});
+  SavingsAccountDetailsPage({super.key, required this.savingsAccount});
   final SavingsAccount savingsAccount;
 
   @override
@@ -16,17 +16,18 @@ class SavingsAccountDetailsPage extends StatefulWidget {
 }
 
 class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
-  late SavingsAccount savingsAccount;
+  // late SavingsAccount savingsAccount;
   @override
   void initState() {
     super.initState();
-    savingsAccount = widget.savingsAccount;
+    // savingsAccount = widget.savingsAccount;
     incomeOrExpenseList.clear();
     fillData();
   }
 
   fillData() async {
-    await savingsAccount.updateTransactions();
+    await widget.savingsAccount.updateTransactions();
+    print(widget.savingsAccount.transactions.length.toString());
 
     valueNotifierX.value += 1;
   }
@@ -40,10 +41,11 @@ class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  TopBarWidget(titleText: savingsAccount.name),
-                  SavingsAccountTopDetails(savingsAccount: savingsAccount),
+                  TopBarWidget(titleText: widget.savingsAccount.name),
+                  SavingsAccountTopDetails(
+                      savingsAccount: widget.savingsAccount),
                   SavingsAccountHistoryWidget(
-                    savingsAccount: savingsAccount,
+                    savingsAccount: widget.savingsAccount,
                   ),
                 ],
               ),

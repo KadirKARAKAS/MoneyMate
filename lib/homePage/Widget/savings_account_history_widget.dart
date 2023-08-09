@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/models/savings_account_transaction.dart';
 
@@ -80,7 +79,7 @@ class SavingsAccountHistoryWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      t.amount,
+                      t.amount.toString(),
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),

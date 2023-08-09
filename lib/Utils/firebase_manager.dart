@@ -7,10 +7,10 @@ class FBManager {
   static Future<List<Map<String, dynamic>>> receivePaymentDetails(
       String docId) async {
     print("11: " + docId);
-    if (paymentDataCache.containsKey(docId)) {
-      print("cached");
-      return paymentDataCache[docId]!;
-    }
+    // if (paymentDataCache.containsKey(docId)) {
+    //   print("cached");
+    //   return paymentDataCache[docId]!;
+    // }
     List<Map<String, dynamic>> l = [];
     String userId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -27,6 +27,7 @@ class FBManager {
     planDetails.docs.forEach((element) {
       l.add(element.data());
     });
+    return l;
     paymentDataCache[docId] = l;
     return paymentDataCache[docId]!;
   }
@@ -57,5 +58,16 @@ class FBManager {
     for (var element in savingsAccounts) {
       print(element.name);
     }
+  }
+
+  static addTransaction(
+      Map<String, dynamic> transaction, String savingsAccountId) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("My Plans")
+        .doc(savingsAccountId)
+        .collection("Income&Expense")
+        .add(transaction);
   }
 }

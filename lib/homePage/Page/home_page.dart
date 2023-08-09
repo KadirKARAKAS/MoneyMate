@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/homePage/Widget/home_page_balance_row_widget.dart';
-import 'package:moneymate/homePage/Widget/home_page_document_history_listview_widget.dart';
 import 'package:moneymate/homePage/Widget/home_page_plans_photo_widget.dart';
+import 'package:moneymate/homePage/Widget/savings_account_history_widget.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
 class HomePagePlans extends StatefulWidget {
@@ -51,7 +51,6 @@ class _HomePagePlansState extends State<HomePagePlans> {
                   const SizedBox(height: 20),
                   const HomePageBalanceRowWidget(),
                   const SizedBox(height: 40),
-                  HomePageDocumentHistoruListview(),
                 ],
               ),
             ),

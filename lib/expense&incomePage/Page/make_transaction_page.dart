@@ -4,18 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
+import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
-class ExpenseIncomePage extends StatefulWidget {
-  const ExpenseIncomePage({super.key});
+class MakeTransactionPage extends StatefulWidget {
+  const MakeTransactionPage({super.key, required this.savingsAccount});
+  final SavingsAccount savingsAccount;
 
   @override
-  State<ExpenseIncomePage> createState() => _ExpenseIncomePageState();
+  State<MakeTransactionPage> createState() => _MakeTransactionPageState();
 }
 
 final TextEditingController expenseOrIncomeController = TextEditingController();
 
-class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
+class _MakeTransactionPageState extends State<MakeTransactionPage> {
+  late SavingsAccount savingsAccount;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    savingsAccount = widget.savingsAccount;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -40,21 +50,21 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
                   alignment: Alignment.centerRight,
                   child: InkWell(
                     onTap: () async {
-                      // await addToDatabase();
-                      setState(() {
-                        Future.delayed(const Duration(milliseconds: 400), () {
-                          valueNotifierX.value += 1;
-                        });
-                        circleBool = false;
-                        expenseOrIncomeController.clear();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SavingsAccountDetailsPage(
-                                savingsAccount: savingsAccounts.first,
-                              ),
-                            ));
-                      });
+                      await addToDatabase();
+                      // setState(() {
+                      //   Future.delayed(const Duration(milliseconds: 400), () {
+                      //     valueNotifierX.value += 1;
+                      //   });
+                      // circleBool = false;
+                      // expenseOrIncomeController.clear();
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => SavingsAccountDetailsPage(
+                      //         savingsAccount: savingsAccounts.first,
+                      //       ),
+                      //     ));
+                      // });
                     },
                     child: Container(
                       width: 100,
@@ -129,34 +139,36 @@ class _ExpenseIncomePageState extends State<ExpenseIncomePage> {
   Future<void> addToDatabase() async {
     String value = expenseOrIncomeController.text;
 
-    final savingAccount = {
+    final transaction = {
       "Value": value,
       "ValueType": expenseOrIncomeBool,
       'createdTime': DateTime.now(),
     };
+    await widget.savingsAccount.makeTransaction(transaction);
+    await widget.savingsAccount.updateTransactions();
 
-    // Yeni veriyi Firebase'e ekleyin ve belge referansını alın
-    await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans")
-        .doc(getdataList[startingIndex]["docId"])
-        .collection("Income&Expense")
-        .add(savingAccount);
-    if (paymentDataCache.containsKey(getdataList[startingIndex]["docId"])) {
-      paymentDataCache.remove(getdataList[startingIndex]["docId"]);
-    }
-    await FBManager.updatePaymentList();
+    // // Yeni veriyi Firebase'e ekleyin ve belge referansını alın
+    // await FirebaseFirestore.instance
+    //     .collection('Users')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection("My Plans")
+    //     .doc(getdataList[startingIndex]["docId"])
+    //     .collection("Income&Expense")
+    //     .add(transaction);
+    // if (paymentDataCache.containsKey(getdataList[startingIndex]["docId"])) {
+    //   paymentDataCache.remove(getdataList[startingIndex]["docId"]);
+    // }
+    // await FBManager.updatePaymentList();
     // await FBManager.receivePaymentDetails(getdataList[startingIndex]["docId"]);
     // Firebase'den veriyi çekerek listenizi güncelleyin
     // await fetchIncomeAndExpenseData();
-    setState(() {
-      Future.delayed(const Duration(milliseconds: 400), () {});
-      circleBool = false;
-      expenseOrIncomeController.clear();
-      Navigator.pop(context);
-      valueNotifierX.value += 1;
-    });
+    // setState(() {
+    Future.delayed(const Duration(milliseconds: 400), () {});
+    circleBool = false;
+    expenseOrIncomeController.clear();
+    Navigator.pop(context);
+    valueNotifierX.value += 1;
+    // });
   }
 
   Future<void> fetchIncomeAndExpenseData() async {
