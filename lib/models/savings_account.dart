@@ -19,7 +19,6 @@ class SavingsAccount {
         docId = data["docId"];
 
   updateTransactions() async {
-    print("Updating transactions");
     List<Map<String, dynamic>> l = await FBManager.receivePaymentDetails(docId);
     transactions.clear();
     for (var element in l) {

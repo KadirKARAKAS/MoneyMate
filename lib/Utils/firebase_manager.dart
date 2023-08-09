@@ -6,14 +6,8 @@ import 'package:moneymate/models/savings_account.dart';
 class FBManager {
   static Future<List<Map<String, dynamic>>> receivePaymentDetails(
       String docId) async {
-    print("11: " + docId);
-    // if (paymentDataCache.containsKey(docId)) {
-    //   print("cached");
-    //   return paymentDataCache[docId]!;
-    // }
     List<Map<String, dynamic>> l = [];
     String userId = FirebaseAuth.instance.currentUser!.uid;
-    print("userId: " + userId);
 
     final planRef = FirebaseFirestore.instance
         .collection("Users")
@@ -56,14 +50,11 @@ class FBManager {
       getdataList.add(doc.data());
       savingsAccounts.add(SavingsAccount.fromMap(doc.data()));
     });
-    for (var element in savingsAccounts) {
-      print(element.name);
-    }
+    for (var element in savingsAccounts) {}
   }
 
   static addTransaction(
       Map<String, dynamic> transaction, String savingsAccountId) async {
-    print("jkldsjflds");
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)

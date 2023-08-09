@@ -23,7 +23,6 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("make transactions");
     savingsAccount = widget.savingsAccount;
   }
 
@@ -51,22 +50,7 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
                   alignment: Alignment.centerRight,
                   child: InkWell(
                     onTap: () async {
-                      print("fdsfdsfdftgttt");
                       await addToDatabase();
-                      // setState(() {
-                      //   Future.delayed(const Duration(milliseconds: 400), () {
-                      //     valueNotifierX.value += 1;
-                      //   });
-                      // circleBool = false;
-                      // expenseOrIncomeController.clear();
-                      // Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => SavingsAccountDetailsPage(
-                      //         savingsAccount: savingsAccounts.first,
-                      //       ),
-                      //     ));
-                      // });
                     },
                     child: Container(
                       width: 100,
@@ -139,7 +123,6 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
   }
 
   Future<void> addToDatabase() async {
-    print("3444454");
     String value = expenseOrIncomeController.text;
 
     final transaction = {

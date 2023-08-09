@@ -48,16 +48,47 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
           },
           child: const Image(
             image: AssetImage("assets/expenseplus.png"),
-            width: 50,
-            height: 50,
+            width: 40,
+            height: 40,
           ),
         ),
-        const SizedBox(width: 30),
-        Text(
-          balanceDetails(),
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+        const SizedBox(width: 20),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Row(
+              children: [
+                Container(
+                  height: 30,
+                  width: 200 *
+                      (savingsAccount.balance / savingsAccount.targetValue),
+                  decoration: BoxDecoration(
+                      color: Colors.green.shade100,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomLeft: Radius.circular(15))),
+                ),
+                Container(
+                  height: 30,
+                  width: 200 *
+                      (1 - savingsAccount.balance / savingsAccount.targetValue),
+                  decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(15),
+                          bottomRight: Radius.circular(15))),
+                ),
+              ],
+            ),
+            Center(
+              child: Text(
+                balanceDetails(),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+            )
+          ],
         ),
-        const SizedBox(width: 30),
+        const SizedBox(width: 20),
         InkWell(
           onTap: () {
             expenseOrIncome = "Income";
@@ -72,8 +103,8 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
           },
           child: const Image(
             image: AssetImage("assets/incomeplus.png"),
-            width: 50,
-            height: 50,
+            width: 40,
+            height: 40,
           ),
         )
       ],
