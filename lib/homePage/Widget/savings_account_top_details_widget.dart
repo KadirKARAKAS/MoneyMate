@@ -103,11 +103,16 @@ class _SavingsAccountPageBalanceRowWidgetState
                               decoration: BoxDecoration(
                                   color: Colors.red.shade100,
                                   borderRadius: BorderRadius.only(
+                                      topRight:
+                                          Radius.circular(10 * (ac.value)),
+                                      bottomRight:
+                                          Radius.circular(10 * (ac.value)),
                                       topLeft: Radius.circular(10),
                                       bottomLeft: Radius.circular(10))),
                             ),
                             Container(
                               height: 30,
+                              // ignore: unnecessary_cast
                               width: 200 *
                                   min(
                                       widget.savingsAccount.balance /
@@ -213,30 +218,29 @@ class SavingsAccountPhotoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: valueNotifierX,
-        builder: (context, value, child) {
-          return Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
+    return Hero(
+      tag: savingsAccount.docId,
+      child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: CachedNetworkImage(
+            imageUrl: savingsAccount.photoURL,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => const Center(
+              child: CircularProgressIndicator(),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: CachedNetworkImage(
-                imageUrl: savingsAccount.photoURL,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => const Icon(
-                  Icons.error,
-                  size: 50,
-                ),
-              ),
+            errorWidget: (context, url, error) => const Icon(
+              Icons.error,
+              size: 50,
             ),
-          );
-        });
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1,11 +1,42 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/models/savings_account_transaction.dart';
 
-class SavingsAccountHistoryWidget extends StatelessWidget {
+class SavingsAccountHistoryWidget extends StatefulWidget {
   const SavingsAccountHistoryWidget({super.key, required this.savingsAccount});
   final SavingsAccount savingsAccount;
+
+  @override
+  State<SavingsAccountHistoryWidget> createState() =>
+      _SavingsAccountHistoryWidgetState();
+}
+
+class _SavingsAccountHistoryWidgetState
+    extends State<SavingsAccountHistoryWidget> with TickerProviderStateMixin {
+  List<AnimationController> ac = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < widget.savingsAccount.transactions.length; i++) {
+      AnimationController a = AnimationController(
+          vsync: this, duration: Duration(milliseconds: 700 + 500 * i));
+      ac.add(a);
+      a.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    for (var element in ac) {
+      element.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +53,16 @@ class SavingsAccountHistoryWidget extends StatelessWidget {
           height: 400,
           child: ListView.builder(
             padding: const EdgeInsets.all(0),
-            itemCount: savingsAccount.transactions.length,
+            itemCount: widget.savingsAccount.transactions.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return savingHistoryContainerWidget(context, index);
+              return AnimatedBuilder(
+                  animation: ac[index],
+                  builder: (context, child) {
+                    return Opacity(
+                        opacity: ac[index].value,
+                        child: savingHistoryContainerWidget(context, index));
+                  });
             },
           ),
         )
@@ -35,7 +72,7 @@ class SavingsAccountHistoryWidget extends StatelessWidget {
 
   Widget savingHistoryContainerWidget(BuildContext context, int index) {
     Size size = MediaQuery.of(context).size;
-    SavingsAccountTransaction t = savingsAccount.transactions[index];
+    SavingsAccountTransaction t = widget.savingsAccount.transactions[index];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       child: Stack(
@@ -62,7 +99,7 @@ class SavingsAccountHistoryWidget extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(999),
                     child: CachedNetworkImage(
-                      imageUrl: savingsAccount.photoURL,
+                      imageUrl: widget.savingsAccount.photoURL,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => const Center(
                         child: CircularProgressIndicator(),

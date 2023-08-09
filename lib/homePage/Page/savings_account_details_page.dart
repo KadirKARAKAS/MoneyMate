@@ -17,17 +17,17 @@ class SavingsAccountDetailsPage extends StatefulWidget {
 
 class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
   // late SavingsAccount savingsAccount;
+  bool isReady = false;
   @override
   void initState() {
     super.initState();
-    // savingsAccount = widget.savingsAccount;
-    incomeOrExpenseList.clear();
+
     fillData();
   }
 
   fillData() async {
     await widget.savingsAccount.updateTransactions();
-
+    isReady = true;
     valueNotifierX.value += 1;
   }
 
@@ -43,9 +43,11 @@ class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
                   TopBarWidget(titleText: widget.savingsAccount.name),
                   SavingsAccountTopDetails(
                       savingsAccount: widget.savingsAccount),
-                  SavingsAccountHistoryWidget(
-                    savingsAccount: widget.savingsAccount,
-                  ),
+                  !isReady
+                      ? SizedBox.shrink()
+                      : SavingsAccountHistoryWidget(
+                          savingsAccount: widget.savingsAccount,
+                        ),
                 ],
               ),
             ),
