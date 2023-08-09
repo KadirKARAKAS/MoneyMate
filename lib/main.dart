@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
-import 'package:moneymate/homePage/Page/home_page.dart';
 import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
 
 import 'splash_screen.dart';
@@ -34,58 +33,16 @@ Future<void> handleAppStart() async {
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(mapSaveData);
-  } else {
-    // GETDATA LİST ÇEKME İŞLEMİ BAŞLADI
-    final userRef = FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans")
-        .orderBy('createdTime', descending: true);
-
-    final querySnapshot = await userRef.get();
-    querySnapshot.docs.forEach((doc) async {
-      await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("My Plans")
-          .doc(doc.id)
-          .update({'docId': doc.id});
-      getdataList.add(doc.data() as Map<String, dynamic>);
-    });
-    final userReff = FirebaseFirestore.instance
-        .collection("Users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("My Plans");
-
-    final querySnapshott = await userReff.get();
-
-    incomeOrExpenseList.clear();
-    await Future.forEach(querySnapshott.docs, (planDoc) async {
-      final incomeExpenseRef = planDoc.reference
-          .collection("Income&Expense")
-          .orderBy('createdTime', descending: true);
-
-      final incomeExpenseSnapshot = await incomeExpenseRef.get();
-
-      incomeExpenseSnapshot.docs.forEach((doc) {
-        incomeOrExpenseList.add(doc.data());
-      });
-    });
   }
   await FBManager.updatePlanList();
 
-  await Future.delayed(
-    const Duration(milliseconds: 1000),
-    () {
-      valueNotifierX.value += 1;
+  valueNotifierX.value += 1;
 
-      runApp(MaterialApp(
-        home: getdataList.isNotEmpty
-            ? SavingsAccountDetailsPage(
-                savingsAccount: savingsAccounts.first,
-              )
-            : AddPlanPage(),
-      ));
-    },
-  );
+  runApp(MaterialApp(
+    home: getdataList.isNotEmpty
+        ? SavingsAccountDetailsPage(
+            savingsAccount: savingsAccounts.first,
+          )
+        : AddPlanPage(),
+  ));
 }

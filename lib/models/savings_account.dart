@@ -5,9 +5,10 @@ class SavingsAccount {
   num startingValue;
   String name;
   String photoURL;
-  String targetValue;
+  num targetValue;
   DateTime createdAt;
   String docId;
+  num balance = 0;
   List<SavingsAccountTransaction> transactions = [];
   SavingsAccount.fromMap(Map<String, dynamic> data)
       : startingValue = data["StartingValue"],
@@ -24,17 +25,21 @@ class SavingsAccount {
     for (var element in l) {
       transactions.add(SavingsAccountTransaction.fromMap(element));
     }
+    calculateBalance();
   }
 
   makeTransaction(Map<String, dynamic> transaction) async {
     await FBManager.addTransaction(transaction, docId);
   }
 
-  // calculateBalance() {
-  //   num balance = 0;
-  //   for (var element in transactions) {
-  //     if (element.isDeposit) {
-  //       balance += element.amount;
-  //     }
-  //   }
+  calculateBalance() {
+    balance = 0;
+    for (var element in transactions) {
+      if (element.isDeposit) {
+        balance += element.amount;
+      } else {
+        balance -= element.amount;
+      }
+    }
+  }
 }

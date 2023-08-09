@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
-import 'package:moneymate/homePage/Page/home_page.dart';
+
 import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
 import 'package:moneymate/savingsAccounts/Widget/savings_account_container_widget.dart';
 import 'package:moneymate/top_bar_widget_back_button.dart';
@@ -30,13 +30,12 @@ class _SavingsAccountPageState extends State<SavingsAccountPage> {
                       ListView.builder(
                         shrinkWrap: true,
                         reverse: true,
-                        itemCount: getdataList.length,
+                        itemCount: savingsAccounts.length,
                         itemBuilder: (context, index) {
                           return SavingsAccountListItemWidget(
                             savingsAccount: savingsAccounts[index],
                             onTap: () {
                               valueNotifierX.value += 1;
-                              startingIndex = index;
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -45,13 +44,6 @@ class _SavingsAccountPageState extends State<SavingsAccountPage> {
                                       savingsAccount: savingsAccounts[index],
                                     ),
                                   ));
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => HomePagePlans(
-                              //           docId: getdataList[startingIndex]
-                              //               ["docId"]),
-                              //     ));
                             },
                           );
                         },

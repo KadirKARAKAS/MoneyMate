@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
-import 'package:moneymate/homePage/Page/home_page.dart';
+import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PlanDetailTextFieldWidget extends StatefulWidget {
@@ -97,9 +97,8 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePagePlans(
-                      docId: getdataList[startingIndex]["docId"],
-                    ),
+                    builder: (context) => SavingsAccountDetailsPage(
+                        savingsAccount: savingsAccounts.first),
                   ));
             });
     });
@@ -227,7 +226,7 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
     final savingAccount = {
       "StartingValue": startingValue,
       "AccountName": accountName,
-      "TargetValue": targetValue,
+      "TargetValue": int.parse(targetValue),
       "PetsPhotoURL": imageURLL,
       'createdTime': DateTime.now()
     };

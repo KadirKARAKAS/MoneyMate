@@ -26,6 +26,7 @@ class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
   }
 
   fillData() async {
+    print("savings account details");
     await widget.savingsAccount.updateTransactions();
     print(widget.savingsAccount.transactions.length.toString());
 

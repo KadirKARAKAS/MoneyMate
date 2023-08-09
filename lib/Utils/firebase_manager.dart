@@ -13,6 +13,7 @@ class FBManager {
     // }
     List<Map<String, dynamic>> l = [];
     String userId = FirebaseAuth.instance.currentUser!.uid;
+    print("userId: " + userId);
 
     final planRef = FirebaseFirestore.instance
         .collection("Users")
@@ -62,6 +63,7 @@ class FBManager {
 
   static addTransaction(
       Map<String, dynamic> transaction, String savingsAccountId) async {
+    print("jkldsjflds");
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(FirebaseAuth.instance.currentUser!.uid)

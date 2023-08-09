@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
-import 'package:moneymate/expense&incomePage/Page/expense_income_page.dart';
 import 'package:moneymate/expense&incomePage/Page/make_transaction_page.dart';
 import 'package:moneymate/models/savings_account.dart';
-import 'package:moneymate/models/savings_account_transaction.dart';
 
 class SavingsAccountTopDetails extends StatelessWidget {
   const SavingsAccountTopDetails({super.key, required this.savingsAccount});
@@ -55,9 +53,9 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 30),
-        const Text(
-          "",
-          style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+        Text(
+          balanceDetails(),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         ),
         const SizedBox(width: 30),
         InkWell(
@@ -67,7 +65,9 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const ExpenseIncomePage(),
+                  builder: (context) => MakeTransactionPage(
+                    savingsAccount: savingsAccount,
+                  ),
                 ));
           },
           child: const Image(
@@ -78,6 +78,12 @@ class SavingsAccountPageBalanceRowWidget extends StatelessWidget {
         )
       ],
     );
+  }
+
+  String balanceDetails() {
+    return savingsAccount.balance.toString() +
+        " / " +
+        savingsAccount.targetValue.toString();
   }
 }
 
