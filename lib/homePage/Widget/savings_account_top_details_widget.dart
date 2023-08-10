@@ -43,7 +43,6 @@ class _SavingsAccountPageBalanceRowWidgetState
 
   @override
   void initState() {
-    // TODO: implement initState
     ac = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1500));
 
@@ -84,7 +83,7 @@ class _SavingsAccountPageBalanceRowWidgetState
         AnimatedBuilder(
             animation: ac,
             builder: (context, child) {
-              return Container(
+              return SizedBox(
                 width: 200,
                 child: Stack(
                   alignment: Alignment.center,
@@ -103,12 +102,12 @@ class _SavingsAccountPageBalanceRowWidgetState
                               decoration: BoxDecoration(
                                   color: Colors.red.shade100,
                                   borderRadius: BorderRadius.only(
-                                      topRight:
-                                          Radius.circular(10 * (ac.value)),
-                                      bottomRight:
-                                          Radius.circular(10 * (ac.value)),
-                                      topLeft: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10))),
+                                      topRight: Radius.circular(
+                                          10 * (ac.value.toInt()).toDouble()),
+                                      bottomRight: Radius.circular(
+                                          10 * (ac.value.toInt()).toDouble()),
+                                      topLeft: const Radius.circular(10),
+                                      bottomLeft: const Radius.circular(10))),
                             ),
                             Container(
                               height: 30,

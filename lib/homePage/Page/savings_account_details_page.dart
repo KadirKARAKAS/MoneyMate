@@ -44,7 +44,7 @@ class _SavingsAccountDetailsPageState extends State<SavingsAccountDetailsPage> {
                   SavingsAccountTopDetails(
                       savingsAccount: widget.savingsAccount),
                   !isReady
-                      ? SizedBox.shrink()
+                      ? const SizedBox.shrink()
                       : SavingsAccountHistoryWidget(
                           savingsAccount: widget.savingsAccount,
                         ),

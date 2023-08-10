@@ -1,9 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
-import 'package:moneymate/Utils/firebase_manager.dart';
-import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/topBar_Widget.dart';
 
@@ -31,49 +30,65 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          TopBarWidget(titleText: expenseOrIncome),
-          const SizedBox(height: 200),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                savingAccountdetailcontainer(
-                  size,
-                  "Enter the amount $expenseOrIncome",
-                  expenseOrIncomeController,
-                  TextInputType.number,
-                ),
-                const SizedBox(height: 15),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () async {
-                      await addToDatabase();
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: expenseOrIncomeBool ? Colors.green : Colors.red,
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Add",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+          Column(
+            children: [
+              TopBarWidget(titleText: expenseOrIncome),
+              const SizedBox(height: 100),
+              SizedBox(
+                width: 150,
+                height: 150,
+                child:
+                    SavingsAccountPhotoWidget(savingsAccount: savingsAccount),
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    savingAccountdetailcontainer(
+                      size,
+                      "Enter the amount $expenseOrIncome",
+                      expenseOrIncomeController,
+                      TextInputType.number,
+                    ),
+                    const SizedBox(height: 15),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () async {
+                          setState(() {
+                            circleBool = true;
+                          });
+                          await addToDatabase();
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color:
+                                expenseOrIncomeBool ? Colors.green : Colors.red,
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          loadingCircle(size),
         ],
       ),
     );
@@ -133,28 +148,15 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
     await widget.savingsAccount.makeTransaction(transaction);
     await widget.savingsAccount.updateTransactions();
 
-    // // Yeni veriyi Firebase'e ekleyin ve belge referansını alın
-    // await FirebaseFirestore.instance
-    //     .collection('Users')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection("My Plans")
-    //     .doc(getdataList[startingIndex]["docId"])
-    //     .collection("Income&Expense")
-    //     .add(transaction);
-    // if (paymentDataCache.containsKey(getdataList[startingIndex]["docId"])) {
-    //   paymentDataCache.remove(getdataList[startingIndex]["docId"]);
-    // }
-    // await FBManager.updatePaymentList();
-    // await FBManager.receivePaymentDetails(getdataList[startingIndex]["docId"]);
-    // Firebase'den veriyi çekerek listenizi güncelleyin
-    // await fetchIncomeAndExpenseData();
-    // setState(() {
     Future.delayed(const Duration(milliseconds: 400), () {});
     circleBool = false;
     expenseOrIncomeController.clear();
+    // ignore: use_build_context_synchronously
     Navigator.pop(context);
     valueNotifierX.value += 1;
-    // });
+    setState(() {
+      circleBool = false;
+    });
   }
 
   Future<void> fetchIncomeAndExpenseData() async {
@@ -177,5 +179,63 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
         incomeOrExpenseList.add(doc.data());
       });
     });
+  }
+
+  Stack loadingCircle(Size size) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (circleBool)
+          Container(
+            width: size.width,
+            height: size.height - 200,
+            color: Colors.transparent,
+          ),
+        circleBool
+            ? const SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  strokeWidth: 10,
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff60F9FF)),
+                ),
+              )
+            : const SizedBox(),
+      ],
+    );
+  }
+}
+
+class SavingsAccountPhotoWidget extends StatelessWidget {
+  const SavingsAccountPhotoWidget({super.key, required this.savingsAccount});
+  final SavingsAccount savingsAccount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: savingsAccount.docId,
+      child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(999),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: CachedNetworkImage(
+            imageUrl: savingsAccount.photoURL,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            errorWidget: (context, url, error) => const Icon(
+              Icons.error,
+              size: 50,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

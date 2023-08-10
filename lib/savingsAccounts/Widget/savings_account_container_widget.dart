@@ -50,7 +50,6 @@ class SavingsAccountListItemWidget extends StatelessWidget {
   final Function onTap;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         onTap();

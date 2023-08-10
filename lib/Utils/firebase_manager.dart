@@ -23,8 +23,6 @@ class FBManager {
       l.add(element.data());
     });
     return l;
-    paymentDataCache[docId] = l;
-    return paymentDataCache[docId]!;
   }
 
   static updatePaymentList() async {
@@ -50,7 +48,6 @@ class FBManager {
       getdataList.add(doc.data());
       savingsAccounts.add(SavingsAccount.fromMap(doc.data()));
     });
-    for (var element in savingsAccounts) {}
   }
 
   static addTransaction(

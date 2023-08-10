@@ -1,6 +1,6 @@
+import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/models/savings_account_transaction.dart';
 
@@ -20,9 +20,9 @@ class _SavingsAccountHistoryWidgetState
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < widget.savingsAccount.transactions.length; i++) {
+    for (var i = 0; i < widget.savingsAccount.transactions.length + 1; i++) {
       AnimationController a = AnimationController(
-          vsync: this, duration: Duration(milliseconds: 700 + 500 * i));
+          vsync: this, duration: Duration(milliseconds: 800 + 200 * i));
       ac.add(a);
       a.forward();
     }
@@ -30,11 +30,9 @@ class _SavingsAccountHistoryWidgetState
 
   @override
   void dispose() {
-    // TODO: implement dispose
     for (var element in ac) {
       element.dispose();
     }
-
     super.dispose();
   }
 
@@ -50,17 +48,17 @@ class _SavingsAccountHistoryWidgetState
                   style: TextStyle(fontSize: 16, color: Colors.grey)),
             )),
         SizedBox(
-          height: 400,
+          height: 420,
           child: ListView.builder(
             padding: const EdgeInsets.all(0),
             itemCount: widget.savingsAccount.transactions.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return AnimatedBuilder(
-                  animation: ac[index],
+                  animation: ac[min(index, ac.length - 1)],
                   builder: (context, child) {
                     return Opacity(
-                        opacity: ac[index].value,
+                        opacity: ac[min(index, ac.length - 1)].value,
                         child: savingHistoryContainerWidget(context, index));
                   });
             },
@@ -116,7 +114,7 @@ class _SavingsAccountHistoryWidgetState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      t.amount.toString(),
+                      widget.savingsAccount.name,
                       style: const TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -125,11 +123,43 @@ class _SavingsAccountHistoryWidgetState
                         style: t.isDeposit
                             ? const TextStyle(
                                 color: Colors.green,
-                                fontWeight: FontWeight.bold)
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12)
                             : const TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.bold))
+                                color: Colors.red,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12))
                   ],
-                )
+                ),
+                Row(
+                  children: [
+                    Text(
+                      t.amount.toString(),
+                      style: t.isDeposit
+                          ? const TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 19)
+                          : const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 19),
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      "\$",
+                      style: t.isDeposit
+                          ? const TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 19)
+                          : const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 19),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

@@ -7,7 +7,6 @@ import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/Utils/firebase_manager.dart';
 import 'package:moneymate/addPlanPage/Page/add_plan_page.dart';
 import 'package:moneymate/homePage/Page/savings_account_details_page.dart';
-
 import 'splash_screen.dart';
 
 // ... diğer import bildirimleri ...
@@ -42,6 +41,6 @@ Future<void> handleAppStart() async {
         ? SavingsAccountDetailsPage(
             savingsAccount: savingsAccounts.first,
           )
-        : AddPlanPage(),
+        : const AddPlanPage(),
   ));
 }
