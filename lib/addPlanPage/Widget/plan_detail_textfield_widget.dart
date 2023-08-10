@@ -139,13 +139,13 @@ class _PlanDetailTextFieldWidgetState extends State<PlanDetailTextFieldWidget> {
   Widget addSavingAccountPhoto(BuildContext context) {
     return InkWell(
       onTap: () async {
-        //BURAYI EN SON DÜZENLE isGranted BLOK PARANTEZLERİNİN İÇERİSİNE YAZ
-        addPhotoFunction();
         var status = await Permission.storage.status;
         print(status);
         if (status.isDenied) {
           await Permission.storage.request().then((value) {
-            if (value.isGranted) {}
+            if (value.isGranted) {
+              addPhotoFunction();
+            }
           });
         } else if (status.isGranted) {
           addPhotoFunction();
