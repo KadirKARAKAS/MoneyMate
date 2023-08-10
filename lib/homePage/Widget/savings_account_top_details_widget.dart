@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
@@ -205,9 +204,7 @@ class _SavingsAccountPageBalanceRowWidgetState
   }
 
   String balanceDetails() {
-    return widget.savingsAccount.balance.toString() +
-        " / " +
-        widget.savingsAccount.targetValue.toString();
+    return "${widget.savingsAccount.balance} \$ / ${widget.savingsAccount.targetValue} \$";
   }
 }
 
