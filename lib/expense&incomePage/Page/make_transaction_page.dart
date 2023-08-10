@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/topBar_Widget.dart';
+import 'package:moneymate/top_bar_widget_back_button.dart';
 
 class MakeTransactionPage extends StatefulWidget {
   const MakeTransactionPage({super.key, required this.savingsAccount});
@@ -34,7 +35,7 @@ class _MakeTransactionPageState extends State<MakeTransactionPage> {
         children: [
           Column(
             children: [
-              TopBarWidget(titleText: expenseOrIncome),
+              TopBarWidgetBackButton(titleText: expenseOrIncome),
               const SizedBox(height: 100),
               SizedBox(
                 width: 150,

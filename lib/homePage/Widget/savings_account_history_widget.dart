@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:moneymate/Utils/constants.dart';
 import 'package:moneymate/models/savings_account.dart';
 import 'package:moneymate/models/savings_account_transaction.dart';
 
@@ -86,79 +87,86 @@ class _SavingsAccountHistoryWidgetState
           Positioned(
             left: 3,
             top: 5,
+            child: SizedBox(
+              width: size.width,
+              child: Row(
+                children: [
+                  Container(
+                    width: 90,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(999),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.savingsAccount.photoURL,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.error,
+                          size: 50,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.savingsAccount.name,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(t.isDeposit ? "Income" : "Expense",
+                          style: t.isDeposit
+                              ? const TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12)
+                              : const TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            right: 10,
+            top: 43,
             child: Row(
               children: [
-                Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(999),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.savingsAccount.photoURL,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      errorWidget: (context, url, error) => const Icon(
-                        Icons.error,
-                        size: 50,
-                      ),
-                    ),
-                  ),
+                Text(
+                  t.amount.toString(),
+                  style: t.isDeposit
+                      ? const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21)
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21),
                 ),
-                const SizedBox(width: 5),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.savingsAccount.name,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(t.isDeposit ? "Income" : "Expense",
-                        style: t.isDeposit
-                            ? const TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12)
-                            : const TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12))
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      t.amount.toString(),
-                      style: t.isDeposit
-                          ? const TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19)
-                          : const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19),
-                    ),
-                    const SizedBox(width: 3),
-                    Text(
-                      "\$",
-                      style: t.isDeposit
-                          ? const TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19)
-                          : const TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 19),
-                    ),
-                  ],
+                const SizedBox(width: 3),
+                Text(
+                  "\$",
+                  style: t.isDeposit
+                      ? const TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21)
+                      : const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 21),
                 ),
               ],
             ),
